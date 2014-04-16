@@ -11,10 +11,6 @@
  */
 
 
-/**
- * Dynamically add the permission check and parent table
- */
-
 $GLOBALS['TL_DCA']['tl_content']['fields']['nl_date'] = array(
 	'exclude'                 => true,
 	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['nl_date'],
@@ -22,7 +18,10 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['nl_date'] = array(
 	'eval'                    => array('rgxp'=>'date', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
 	'sql'                     => "varchar(10) NOT NULL default ''"
 );
- 
+
+/**
+ * Dynamically add the permission check and parent table
+ */
 if (Input::get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_newsletter';
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_newsletter', 'checkPermission');
@@ -32,6 +31,9 @@ if (Input::get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_image'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['image'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_header'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'] . ',nl_date';
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_footer'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
+
+	//$GLOBALS['TL_DCA']['tl_content']['fields']['type']['reference'] = &$GLOBALS['TL_LANG']['NL_CTE'];
+	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['eval']['helpwizard'] = false;
 
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
 		if ($k != 'newsletter') {
