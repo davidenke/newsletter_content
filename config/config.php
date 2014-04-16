@@ -27,16 +27,18 @@ $GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'ModuleNewsletterContentReader';
 /**
  * Newsletter elements
  */
-array_insert($GLOBALS['TL_CTE'], 10, array(
-	'newsletter' => array(
-		'nl_header'          => 'NewsletterHeader',
-		'nl_breakrow'        => 'NewsletterBreakRow',
-		'nl_breaktable'      => 'NewsletterBreakTable',
-		'nl_footer'          => 'NewsletterFooter',
-		'nl_text'            => 'NewsletterContentText',
-		'nl_image'           => 'NewsletterContentImage'
-	)
-));
+if (Input::get('do') == 'newsletter' || (Input::get('table') == 'tl_content' && Input::get('field') == 'type')) {
+	$GLOBALS['TL_CTE'] = array(
+		'newsletter' => array(
+			'nl_header'          => 'NewsletterHeader',
+			'nl_breakrow'        => 'NewsletterBreakRow',
+			'nl_breaktable'      => 'NewsletterBreakTable',
+			'nl_footer'          => 'NewsletterFooter',
+			'nl_text'            => 'NewsletterContentText',
+			'nl_image'           => 'NewsletterContentImage'
+		)
+	);
+}
 
 
 /**
