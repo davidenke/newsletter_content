@@ -14,8 +14,8 @@
 /**
  * Dynamically add the permission check and parent table
  */
- 
-if (Input::get('do') == 'newsletter') {
+
+if (\Input::get('do') == 'newsletter' || strpos($_SERVER['PHP_SELF'], 'help.php') !== false) {
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_newsletter';
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_newsletter', 'checkPermission');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias', 'useSMTP');
@@ -24,6 +24,8 @@ if (Input::get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_image'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['image'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_header'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_footer'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
+
+	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = 'default';
 
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
 		if ($k != 'newsletter') {
