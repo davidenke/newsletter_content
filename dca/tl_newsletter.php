@@ -25,7 +25,14 @@ array_insert($GLOBALS['TL_DCA']['tl_newsletter']['list']['operations'], 1, array
 		'icon'                => 'header.gif'
 	)
 ));
-$GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default'] = str_replace('{html_legend},content;', '', $GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default'] = str_replace(';{html_legend},content;', ',nl_date;', $GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_newsletter']['fields']['nl_date'] = array(
+	'exclude'                 => true,
+	'label'                   => &$GLOBALS['TL_LANG']['tl_newsletter']['nl_date'],
+	'inputType'               => 'text',
+	'eval'                    => array('rgxp'=>'date', 'datepicker'=>true, 'tl_class'=>'w50 wizard'),
+	'sql'                     => "varchar(10) NOT NULL default ''"
+);
 
 
 class tl_newsletter_content extends tl_newsletter {

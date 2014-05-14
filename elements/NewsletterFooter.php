@@ -25,7 +25,7 @@ namespace Contao;
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class NewsletterFooter extends \ContentElement {
+class NewsletterFooter extends \NewsletterBoundaries {
 
 	/**
 	 * Template
@@ -43,19 +43,5 @@ class NewsletterFooter extends \ContentElement {
 		}
 
 		return parent::generate();
-	}
-
-
-	/**
-	 * Generate the content element
-	 */
-	protected function compile() {
-		$objNewsletter = \NewsletterModel::findByIdOrAlias($this->pid);
-		$objNewsletterChannel = \NewsletterChannelModel::findByIds(array($objNewsletter->pid), array('limit' => 1));
-
-		$href = ampersand($this->generateFrontendUrl($this->getPageDetails($objNewsletterChannel->jumpTo)->row(), '/items/' . $objNewsletter->alias));
-		$this->Template->view_online = $href;
-
-		return;
 	}
 }

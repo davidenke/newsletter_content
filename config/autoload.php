@@ -21,6 +21,7 @@ ClassLoader::addClasses(array
 	'Contao\NewsletterContentImage'        => 'system/modules/newsletter_content/elements/NewsletterContentImage.php',
 	'Contao\NewsletterBreakRow'            => 'system/modules/newsletter_content/elements/NewsletterBreakRow.php',
 	'Contao\NewsletterContentText'         => 'system/modules/newsletter_content/elements/NewsletterContentText.php',
+	'Contao\NewsletterBoundaries'          => 'system/modules/newsletter_content/elements/NewsletterBoundaries.php',
 	'Contao\NewsletterFooter'              => 'system/modules/newsletter_content/elements/NewsletterFooter.php',
 	'Contao\NewsletterHeader'              => 'system/modules/newsletter_content/elements/NewsletterHeader.php',
 
