@@ -31,11 +31,41 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 	 * Generate the module
 	 */
 	protected function compile() {
-		parent::compile();
+		global $objPage;
 
-		$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
+		$this->Template->content = '';
+		$this->Template->referer = 'javascript:history.go(-1)';
+		$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
+
+		if (TL_MODE == 'FE' && BE_USER_LOGGED_IN) {
+			$objNewsletter = \NewsletterModel::findByIdOrAlias(\Input::get('items'));
+		} else {
+			$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
+		}
+
+		if ($objNewsletter === null) {
+			// Do not index or cache the page
+			$objPage->noSearch = 1;
+			$objPage->cache = 0;
+
+			// Send a 404 header
+			header('HTTP/1.1 404 Not Found');
+			$this->Template->content = '<p class="error">' . sprintf($GLOBALS['TL_LANG']['MSC']['invalidPage'], \Input::get('items')) . '</p>';
+			return;
+		}
+
+		// Overwrite the page title (see #2853 and #4955)
+		if ($objNewsletter->subject != '') {
+			$objPage->pageTitle = strip_tags(strip_insert_tags($objNewsletter->subject));
+		}
+
+		// Add enclosure
+		if ($objNewsletter->addFile) {
+			$this->addEnclosuresToTemplate($this->Template, $objNewsletter->row(), 'files');
+		}
 
 		if (!$objNewsletter->sendText) {
+			$nl2br = ($objPage->outputFormat == 'xhtml') ? 'nl2br_xhtml' : 'nl2br_html5';
 			$strContent = '';
 			$objContentElements = \ContentModel::findPublishedByPidAndTable($objNewsletter->id, 'tl_newsletter');
 
@@ -56,6 +86,18 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 			$strContent = \String::encodeEmail($strContent);
 
 			$this->Template->content = $strContent;
+		} else {
+			$strContent = str_ireplace(' align="center"', '', $objNewsletter->content);
 		}
+
+		// Parse simple tokens and insert tags
+		$strContent = $this->replaceInsertTags($strContent);
+		$strContent = \String::parseSimpleTokens($strContent, array());
+
+		// Encode e-mail addresses
+		$strContent = \String::encodeEmail($strContent);
+
+		$this->Template->content = $strContent;
+		$this->Template->subject = $objNewsletter->subject;
 	}
 }
