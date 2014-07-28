@@ -38,6 +38,6 @@ class NewsletterContentImage extends \ContentImage {
 	 * Generate the content element
 	 */
 	protected function compile() {
-		return parent::compile();
+        $this->addImageToTemplate($this->Template, $this->arrData, 900);
 	}
 }
