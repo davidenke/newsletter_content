@@ -38,6 +38,10 @@ class NewsletterContentImage extends \ContentImage {
 	 * Generate the content element
 	 */
 	protected function compile() {
-        $this->addImageToTemplate($this->Template, $this->arrData, 900);
+        if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
+            $this->addImageToTemplate($this->Template, $this->arrData);
+        }else{
+            $this->addImageToTemplate($this->Template, $this->arrData, 900);
+        }
 	}
 }
