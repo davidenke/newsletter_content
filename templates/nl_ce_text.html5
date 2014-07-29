@@ -8,8 +8,6 @@
     <?php echo $this->text; ?>
   <?php endif; ?>
 
-        <?php print(($this->nlc_test)) ?>
-
   <?php if ($this->addImage): ?>
 
       <?php if ($this->href): ?>
