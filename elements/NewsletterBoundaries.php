@@ -33,7 +33,9 @@ abstract class NewsletterBoundaries extends \ContentElement {
 		$objNewsletter = \NewsletterModel::findByIdOrAlias($this->pid);
 		$objNewsletterChannel = \NewsletterChannelModel::findByIds(array($objNewsletter->pid), array('limit' => 1));
 
-		$href = ampersand($this->generateFrontendUrl($this->getPageDetails($objNewsletterChannel->jumpTo)->row(), '/items/' . $objNewsletter->alias));
+		$objParent = $this->getPageDetails($objNewsletterChannel->jumpTo);
+		$href = ampersand($this->generateFrontendUrl($objParent->row(), sprintf((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s', $objNewsletter->alias)));
+		//$href = ampersand($this->generateFrontendUrl($objParent->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s'), $objParent->language));
 
 		$this->Template->setData($objNewsletter->row());
 		$this->Template->view_online = $href;
