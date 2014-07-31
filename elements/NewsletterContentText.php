@@ -38,6 +38,27 @@ class NewsletterContentText extends \ContentText {
 	 * Generate the content element
 	 */
 	protected function compile() {
-		return parent::compile();
+
+		parent::compile();
+
+        $nlc_imgattr = '';
+        if($this->floating == 'left')
+            $nlc_imgattr = ' align="left"';
+        else if($this->floating == 'right')
+            $nlc_imgattr = ' align="right"';
+
+        $margin = unserialize($this->imagemargin);
+
+        // outlook 07/10 kann kein margin (13 wohl auch nicht)
+        $nlc_margin = '';
+        if(!empty($margin['right']))
+            $nlc_margin .= ' hspace="'.$margin['right'].'"';
+        if(!empty($margin['bottom']))
+            $nlc_margin .= ' vspace="'.$margin['bottom'].'"';
+
+
+        $this->Template->nlc_imgattr = $nlc_margin . $nlc_imgattr;
+
+
 	}
 }
