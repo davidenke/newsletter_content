@@ -34,7 +34,8 @@ array_insert($GLOBALS['TL_CTE'], 10, array(
 		'nl_breaktable'      => 'NewsletterBreakTable',
 		'nl_footer'          => 'NewsletterFooter',
 		'nl_text'            => 'NewsletterContentText',
-		'nl_image'           => 'NewsletterContentImage'
+		'nl_image'           => 'NewsletterContentImage',
+		'nl_form'            => 'NewsletterContentForm'
 	)
 ));
 

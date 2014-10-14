@@ -24,6 +24,7 @@ if (Input::get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_image'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['image'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_header'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_footer'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
+	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_form'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['form'];
 
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
 		if ($k != 'newsletter') {

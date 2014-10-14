@@ -16,17 +16,18 @@
  */
 ClassLoader::addClasses(array
 (
-	// Elements
-	'Contao\NewsletterBreakTable'          => 'system/modules/newsletter_content/elements/NewsletterBreakTable.php',
-	'Contao\NewsletterContentImage'        => 'system/modules/newsletter_content/elements/NewsletterContentImage.php',
-	'Contao\NewsletterBreakRow'            => 'system/modules/newsletter_content/elements/NewsletterBreakRow.php',
-	'Contao\NewsletterContentText'         => 'system/modules/newsletter_content/elements/NewsletterContentText.php',
-	'Contao\NewsletterBoundaries'          => 'system/modules/newsletter_content/elements/NewsletterBoundaries.php',
-	'Contao\NewsletterFooter'              => 'system/modules/newsletter_content/elements/NewsletterFooter.php',
-	'Contao\NewsletterHeader'              => 'system/modules/newsletter_content/elements/NewsletterHeader.php',
-
 	// Classes
 	'Contao\NewsletterContent'             => 'system/modules/newsletter_content/classes/NewsletterContent.php',
+
+	// Elements
+	'Contao\NewsletterBoundaries'          => 'system/modules/newsletter_content/elements/NewsletterBoundaries.php',
+	'Contao\NewsletterBreakRow'            => 'system/modules/newsletter_content/elements/NewsletterBreakRow.php',
+	'Contao\NewsletterBreakTable'          => 'system/modules/newsletter_content/elements/NewsletterBreakTable.php',
+	'Contao\NewsletterContentForm'         => 'system/modules/newsletter_content/elements/NewsletterContentForm.php',
+	'Contao\NewsletterContentImage'        => 'system/modules/newsletter_content/elements/NewsletterContentImage.php',
+	'Contao\NewsletterContentText'         => 'system/modules/newsletter_content/elements/NewsletterContentText.php',
+	'Contao\NewsletterFooter'              => 'system/modules/newsletter_content/elements/NewsletterFooter.php',
+	'Contao\NewsletterHeader'              => 'system/modules/newsletter_content/elements/NewsletterHeader.php',
 
 	// Modules
 	'Contao\ModuleNewsletterContentReader' => 'system/modules/newsletter_content/modules/ModuleNewsletterContentReader.php',
@@ -38,11 +39,11 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'nl_header'     => 'system/modules/newsletter_content/templates',
-	'nl_breaktable' => 'system/modules/newsletter_content/templates',
-	'nl_breakrow'   => 'system/modules/newsletter_content/templates',
-	'nl_ce_text'    => 'system/modules/newsletter_content/templates',
 	'mail_default'  => 'system/modules/newsletter_content/templates',
-	'nl_footer'     => 'system/modules/newsletter_content/templates',
+	'nl_breakrow'   => 'system/modules/newsletter_content/templates',
+	'nl_breaktable' => 'system/modules/newsletter_content/templates',
 	'nl_ce_image'   => 'system/modules/newsletter_content/templates',
+	'nl_ce_text'    => 'system/modules/newsletter_content/templates',
+	'nl_footer'     => 'system/modules/newsletter_content/templates',
+	'nl_header'     => 'system/modules/newsletter_content/templates',
 ));

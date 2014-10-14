@@ -21,6 +21,14 @@
         <source>Generates an image element.</source>
         <target>Erzeugt ein Bild-Element.</target>
       </trans-unit>
+      <trans-unit id="CTE.nl_form.0">
+        <source>Form</source>
+        <target>Formular</target>
+      </trans-unit>
+      <trans-unit id="CTE.nl_form.1">
+        <source>Generates a form element.</source>
+        <target>Erzeugt ein Newsletter-Formular.</target>
+      </trans-unit>
       <trans-unit id="CTE.nl_header.0">
         <source>Header</source>
         <target>Kopfzeile</target>
