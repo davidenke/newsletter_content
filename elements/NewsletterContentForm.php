@@ -25,4 +25,22 @@ namespace Contao;
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class NewsletterContentForm extends \Form {}
+class NewsletterContentForm extends \ContentElement {
+
+	/**
+	 * Template
+	 * @var string
+	 */
+	protected $strTemplate = 'nl_ce_form';
+
+
+	/**
+	 * Generate the content element
+	 */
+	protected function compile() {
+		$strForm = $this->getForm($this->form);
+		$strForm = preg_replace("/(action\s*=\s*[\"'])(?!http)([^\"'>]+)([\"'>]+)/", '$1' . \Environment::get('base') . '$2$3', $strForm);
+
+		$this->Template->form = $strForm;
+	}
+}

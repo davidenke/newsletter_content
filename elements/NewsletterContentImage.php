@@ -40,7 +40,7 @@ class NewsletterContentImage extends \ContentImage {
 	protected function compile() {
         if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
             $this->addImageToTemplate($this->Template, $this->arrData);
-        }else{
+        } else {
             $this->addImageToTemplate($this->Template, $this->arrData, 900);
         }
 	}

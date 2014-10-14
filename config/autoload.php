@@ -42,6 +42,7 @@ TemplateLoader::addFiles(array
 	'mail_default'  => 'system/modules/newsletter_content/templates',
 	'nl_breakrow'   => 'system/modules/newsletter_content/templates',
 	'nl_breaktable' => 'system/modules/newsletter_content/templates',
+	'nl_ce_form'    => 'system/modules/newsletter_content/templates',
 	'nl_ce_image'   => 'system/modules/newsletter_content/templates',
 	'nl_ce_text'    => 'system/modules/newsletter_content/templates',
 	'nl_footer'     => 'system/modules/newsletter_content/templates',
