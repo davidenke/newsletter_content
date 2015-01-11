@@ -44,11 +44,16 @@ class tl_newsletter_content extends tl_newsletter {
 	 */
 	public function listNewsletterArticles($arrRow) {
 		$strContents = '';
-		$objContents = \ContentModel::findPublishedByPidAndTable($arrRow['id'], 'tl_newsletter');
+
+		if (class_exists('ContentModel', false)) {
+			$objContents = \ContentModel::findPublishedByPidAndTable($arrRow['id'], 'tl_newsletter');
+		} else {
+			$objContents = (object) array();
+		}
 
 		if ($objContents !== null) {
-			while ($objContents->next()) {
-				$strContents.= $this->getContentElement($objContents->id) . '<hr>';
+			foreach ($objContents as $objContent) {
+				$strContents.= $this->getContentElement($objContent->id) . '<hr>';
 			}
 		}
 

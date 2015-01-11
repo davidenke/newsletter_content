@@ -14,8 +14,8 @@
 /**
  * Dynamically add the permission check and parent table
  */
- 
-if (Input::get('do') == 'newsletter') {
+
+if ($this->Input->get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_newsletter';
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_newsletter', 'checkPermission');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias', 'useSMTP');
@@ -25,6 +25,8 @@ if (Input::get('do') == 'newsletter') {
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_header'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_footer'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_form'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['form'];
+
+	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = 'nl_text';
 
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
 		if ($k != 'newsletter') {
@@ -71,10 +73,10 @@ class tl_content_newsletter extends Backend {
 			$root = $this->User->newsletters;
 		}
 
-		//$id = strlen(Input::get('id')) ? Input::get('id') : CURRENT_ID;
+		//$id = strlen($this->Input->get('id')) ? $this->Input->get('id') : CURRENT_ID;
 
 		// Check the current action
-		switch (Input::get('act'))
+		switch ($this->Input->get('act'))
 		{
 			case 'paste':
 				// Allow
@@ -96,7 +98,7 @@ class tl_content_newsletter extends Backend {
 			case 'cutAll':
 			case 'copyAll':
 				// Check access to the parent element if a content element is moved
-				if ((Input::get('act') == 'cutAll' || Input::get('act') == 'copyAll') && !$this->checkAccessToElement(Input::get('pid'), $root, (Input::get('mode') == 2)))
+				if (($this->Input->get('act') == 'cutAll' || $this->Input->get('act') == 'copyAll') && !$this->checkAccessToElement($this->Input->get('pid'), $root, ($this->Input->get('mode') == 2)))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
@@ -112,7 +114,7 @@ class tl_content_newsletter extends Backend {
 			case 'cut':
 			case 'copy':
 				// Check access to the parent element if a content element is moved
-				if (!$this->checkAccessToElement(Input::get('pid'), $root, (Input::get('mode') == 2)))
+				if (!$this->checkAccessToElement($this->Input->get('pid'), $root, ($this->Input->get('mode') == 2)))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}
@@ -120,7 +122,7 @@ class tl_content_newsletter extends Backend {
 
 			default:
 				// Check access to the content element
-				if (!$this->checkAccessToElement(Input::get('id'), $root))
+				if (!$this->checkAccessToElement($this->Input->get('id'), $root))
 				{
 					$this->redirect('contao/main.php?act=error');
 				}

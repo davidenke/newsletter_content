@@ -38,9 +38,17 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 		$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
 
 		if (TL_MODE == 'FE' && BE_USER_LOGGED_IN) {
-			$objNewsletter = \NewsletterModel::findByIdOrAlias(\Input::get('items'));
+			if (class_exists('NewsletterModel', false)) {
+				$objNewsletter = \NewsletterModel::findByIdOrAlias(\Input::get('items'));
+			} else {
+				$objNewsletter = (object) array();
+			}
 		} else {
-			$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
+			if (class_exists('NewsletterModel', false)) {
+				$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
+			} else {
+				$objNewsletter = (object) array();
+			}
 		}
 
 		if ($objNewsletter === null) {
@@ -67,14 +75,19 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 		if (!$objNewsletter->sendText) {
 			$nl2br = ($objPage->outputFormat == 'xhtml') ? 'nl2br_xhtml' : 'nl2br_html5';
 			$strContent = '';
-			$objContentElements = \ContentModel::findPublishedByPidAndTable($objNewsletter->id, 'tl_newsletter');
+
+			if (class_exists('ContentModel', false)) {
+				$objContentElements = \ContentModel::findPublishedByPidAndTable($objNewsletter->id, 'tl_newsletter');
+			} else {
+				$objContentElements = (object) array();
+			}
 
 			if ($objContentElements !== null) {
 				if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
 					define('NEWSLETTER_CONTENT_PREVIEW', true);
 				}
-				while ($objContentElements->next()) {
-					$strContent.= $this->getContentElement($objContentElements->id);
+				foreach ($objContentElements as $objContentElement) {
+					$strContent.= $this->getContentElement($objContentElement->id);
 				}
 			}
 			
