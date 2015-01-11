@@ -38,14 +38,3 @@ array_insert($GLOBALS['TL_CTE'], 10, array(
 		'nl_form'            => 'NewsletterContentForm'
 	)
 ));
-
-
-/**
- * Register hooks
- */
-/*
-$GLOBALS['TL_HOOKS']['createNewUser'][] = array('Newsletter', 'createNewUser');
-$GLOBALS['TL_HOOKS']['activateAccount'][] = array('Newsletter', 'activateAccount');
-$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('Newsletter', 'getSearchablePages');
-$GLOBALS['TL_HOOKS']['closeAccount'][] = array('Newsletter', 'removeSubscriptions');
-*/
