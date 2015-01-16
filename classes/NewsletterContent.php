@@ -92,9 +92,7 @@ class NewsletterContent extends \Newsletter {
 		}
 
 		// Convert relative URLs
-		if ($objNewsletter->externalImages) {
-			$html = $this->convertRelativeUrls($html);
-		}
+		$html = $this->convertRelativeUrls($html);
 
 		// Replace insert tags
 		$text = $this->replaceInsertTags($objNewsletter->text);
