@@ -32,6 +32,8 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 		'nl_footer' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
 		'nl_text' => $GLOBALS['TL_DCA']['tl_content']['palettes']['text'],
 		'nl_image' => $GLOBALS['TL_DCA']['tl_content']['palettes']['image'],
+		'nl_news' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_events' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_form' => $GLOBALS['TL_DCA']['tl_content']['palettes']['form']
 	);
 
@@ -51,6 +53,9 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 			$strPalette
 		);
 	}
+	$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'include_type';
+	$GLOBALS['TL_DCA']['tl_content']['subpalettes']['include_type_archives'] = 'include_archives';
+	$GLOBALS['TL_DCA']['tl_content']['subpalettes']['include_type_items'] = 'include_items';
 
 	// customize fields
 	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = 'nl_text';
@@ -65,6 +70,33 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 } elseif (TL_MODE == 'BE') {
 	unset($GLOBALS['TL_CTE']['newsletter']);
 }
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['include_type'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['include_type'],
+	'exclude'                 => true,
+	'inputType'               => 'select',
+	'default'                 => 'archives',
+	'options'                 => array('archives', 'items'),
+	'reference'               => &$GLOBALS['TL_LANG']['tl_content']['include_types'],
+	'eval'                    => array('chosen'=>true, 'submitOnChange'=>true, 'mandatory'=>true),
+	'sql'                     => "varchar(32) NOT NULL default ''"
+);
+$GLOBALS['TL_DCA']['tl_content']['fields']['include_archives'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['include_archives'],
+	'exclude'                 => true,
+	'inputType'               => 'checkboxWizard',
+	'options_callback'        => array('tl_content_newsletter', 'getIncludeArchives'),
+	'eval'                    => array('multiple'=>true, 'mandatory'=>true),
+	'sql'                     => "blob NULL"
+);
+$GLOBALS['TL_DCA']['tl_content']['fields']['include_items'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['include_items'],
+	'exclude'                 => true,
+	'inputType'               => 'checkboxWizard',
+	'options_callback'        => array('tl_content_newsletter', 'getIncludeItems'),
+	'eval'                    => array('multiple'=>true, 'mandatory'=>true),
+	'sql'                     => "blob NULL"
+);
 
 class tl_content_newsletter extends Backend {
 
@@ -183,5 +215,118 @@ class tl_content_newsletter extends Backend {
 		}
 
 		return true;
+	}
+
+
+	public function getIncludeArchives(\DataContainer $dc) {
+		$arrReturn = array();
+		$strTable = '';
+		$strTitleKey = '';
+		$strPatternUrl = '%s';
+
+		if (!$dc->activeRecord->type) {
+			return $arrReturn;
+		}
+
+		switch ($dc->activeRecord->type) {
+			case 'nl_news':
+				$strTable = 'tl_news_archive';
+				$strTitleKey = 'title';
+				$strPatternUrl = 'contao/main.php?do=news&id=%s&act=edit&popup=1&nb=1&rt=%s';
+				$objArchives = \NewsArchiveModel::findAll(array('order'=>$strTable . '.' . $strTitleKey));
+				break;
+
+			case 'nl_events':
+				$strTable = 'tl_calendar';
+				$strTitleKey = 'title';
+				$strPatternUrl = 'contao/main.php?do=calendar&id=%s&act=edit&popup=1&nb=1&rt=%s';
+				$objArchives = \CalendarModel::findAll(array('order'=>$strTable . '.' . $strTitleKey));
+				break;
+
+			default:
+				return $arrReturn;
+				break;
+		}
+
+		if (!is_null($objArchives)) {
+			foreach ($objArchives as $objArchive) {
+				$strDo = ampersand(sprintf($strPatternUrl, $objArchive->id, REQUEST_TOKEN));
+
+				$arrReturn[$objArchive->id] = sprintf(
+					'<strong><a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a></strong>',
+					$strDo,
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objArchive->id),
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objArchive->id),
+					$objArchive->$strTitleKey
+				);
+			}
+		}
+
+		return $arrReturn;
+	}
+
+
+	public function getIncludeItems(\DataContainer $dc) {
+		$arrReturn = array();
+		$strTable = '';
+		$strDateKey = '';
+		$strTitleKeyArchive = '';
+		$strTitleKeyItem = '';
+		$strPatternArchiveUrl = '%s';
+		$strPatternItemUrl = '%s';
+
+		if (!$dc->activeRecord->type) {
+			return $arrReturn;
+		}
+
+		switch ($dc->activeRecord->type) {
+			case 'nl_news':
+				$strTable = 'tl_news';
+				$strDateKey = 'date';
+				$strTitleKeyItem = 'headline';
+				$strTitleKeyArchive = 'title';
+				$strPatternArchiveUrl = 'contao/main.php?do=news&id=%s&act=edit&popup=1&nb=1&rt=%s';
+				$strPatternItemUrl    = 'contao/main.php?do=news&id=%s&act=edit&popup=1&nb=1&rt=%s&table=%s';
+				$objItems = \NewsModel::findAll(array('order'=>$strTable . '.' . $strDateKey));
+				break;
+
+			case 'nl_events':
+				$strTable = 'tl_calendar_events';
+				$strDateKey = 'startDate';
+				$strTitleKeyItem = 'title';
+				$strTitleKeyArchive = 'title';
+				$strPatternArchiveUrl = 'contao/main.php?do=calendar&id=%s&act=edit&popup=1&nb=1&rt=%s';
+				$strPatternItemUrl    = 'contao/main.php?do=calendar&id=%s&act=edit&popup=1&nb=1&rt=%s&table=%s';
+				$objItems = \CalendarEventsModel::findAll(array('order'=>$strTable . '.' . $strDateKey));
+				break;
+
+			default:
+				return $arrReturn;
+				break;
+		}
+
+		if (!is_null($objItems)) {
+			foreach ($objItems as $objItem) {
+				$objArchive = $objItem->getRelated('pid');
+				$strDoArchive = ampersand(sprintf($strPatternArchiveUrl, $objItem->pid, REQUEST_TOKEN));
+				$strDoItem = ampersand(sprintf($strPatternItemUrl, $objItem->id, REQUEST_TOKEN, $strTable));
+				$strDateField = \Date::parse(\Config::get('dateFormat') ?: 'd.m.Y', $objItem->$strDateKey) . ' - ';
+
+				$arrReturn[$objItem->id] = sprintf(
+					'%s<strong><a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a></strong> - <a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a>',
+					$strDateField,
+					$strDoItem,
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objItem->id),
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objItem->id),
+					$objItem->$strTitleKeyItem,
+					$strDoArchive,
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objArchive->id),
+					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objArchive->id),
+					$objArchive->$strTitleKeyArchive
+				);
+			}
+		}
+
+		return $arrReturn;
 	}
 }
