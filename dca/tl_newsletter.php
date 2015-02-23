@@ -3,11 +3,16 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
- * @package Newsletter
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ */
+
+/**
+ * @package newsletter_content
+ *
+ * @copyright  David Enke 2015
+ * @author     David Enke <post@davidenke.de>
+ * @package    newsletter_content
  */
 
 
@@ -34,7 +39,6 @@ $GLOBALS['TL_DCA']['tl_newsletter']['fields']['nl_date'] = array(
 	'sql'                     => "varchar(10) NOT NULL default ''"
 );
 
-
 class tl_newsletter_content extends tl_newsletter {
 
 	/**
@@ -45,13 +49,9 @@ class tl_newsletter_content extends tl_newsletter {
 	public function listNewsletterArticles($arrRow) {
 		$strContents = '';
 
-		if (class_exists('ContentModel', false)) {
-			$objContents = \ContentModel::findPublishedByPidAndTable($arrRow['id'], 'tl_newsletter');
-		} else {
-			$objContents = (object) array();
-		}
+		$objContents = \ContentModel::findPublishedByPidAndTable($arrRow['id'], 'tl_newsletter');
 
-		if ($objContents !== null) {
+		if (!is_null($objContents)) {
 			foreach ($objContents as $objContent) {
 				$strContents.= $this->getContentElement($objContent->id) . '<hr>';
 			}

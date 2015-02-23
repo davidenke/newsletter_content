@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
  * @link    https://contao.org
@@ -14,18 +14,18 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Elements;
 
 
 /**
- * Class NewsletterContentForm
+ * Class Form
  *
  * Newsletter content element "form".
- * @copyright  David Enke 2014
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class NewsletterContentForm extends \Form {
+class Form extends \Form {
 	public function generate() {
 		return Hybrid::generate();
 	}

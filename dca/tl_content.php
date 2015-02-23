@@ -3,49 +3,69 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
- * @package News
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ */
+
+/**
+ * @package newsletter_content
+ *
+ * @copyright  David Enke 2015
+ * @author     David Enke <post@davidenke.de>
+ * @package    newsletter_content
  */
 
 
 /**
  * Dynamically add the permission check and parent table
  */
-
-if ($this->Input->get('do') == 'newsletter') {
+if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_content' && \Input::get('field') == 'type')) {
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_newsletter';
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_newsletter', 'checkPermission');
 	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias', 'useSMTP');
 
-	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_text'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['text'];
-	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_image'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['image'];
-	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_header'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
-	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_footer'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['default'];
-	$GLOBALS['TL_DCA']['tl_content']['palettes']['nl_form'] = $GLOBALS['TL_DCA']['tl_content']['palettes']['form'];
+	// copy default palettes
+	$arrPalettes = array(
+		'nl_header' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
+		'nl_breakrow' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
+		'nl_breaktable' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
+		'nl_footer' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
+		'nl_text' => $GLOBALS['TL_DCA']['tl_content']['palettes']['text'],
+		'nl_image' => $GLOBALS['TL_DCA']['tl_content']['palettes']['image'],
+		'nl_form' => $GLOBALS['TL_DCA']['tl_content']['palettes']['form']
+	);
 
+	// add palettes
+	foreach ($arrPalettes as $k => $strPalette) {
+		$GLOBALS['TL_DCA']['tl_content']['palettes'][$k] = str_replace(
+			array(
+				',guests,',
+				',fullsize,',
+				'{template_legend:hide},customTpl;{protected_legend:hide},protected;'
+			),
+			array(
+				',',
+				',',
+				''
+			),
+			$strPalette
+		);
+	}
+
+	// customize fields
 	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = 'nl_text';
 
+	// remove default elements
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
 		if ($k != 'newsletter') {
 			unset($GLOBALS['TL_CTE'][$k]);
 		}
 	}
+
 } elseif (TL_MODE == 'BE') {
 	unset($GLOBALS['TL_CTE']['newsletter']);
 }
 
-
-/**
- * Class tl_content_newsletter
- *
- * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright  Leo Feyer 2005-2014
- * @author     Leo Feyer <https://contao.org>
- * @package    News
- */
 class tl_content_newsletter extends Backend {
 
 	/**

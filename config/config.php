@@ -3,11 +3,16 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
- * @package Newsletter
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ */
+
+/**
+ * @package newsletter_content
+ *
+ * @copyright  David Enke 2015
+ * @author     David Enke <post@davidenke.de>
+ * @package    newsletter_content
  */
 
 
@@ -15,13 +20,13 @@
  * Back end modules
  */
 $GLOBALS['BE_MOD']['content']['newsletter']['tables'][] = 'tl_content';
-$GLOBALS['BE_MOD']['content']['newsletter']['send'] = array('NewsletterContent', 'send');
+$GLOBALS['BE_MOD']['content']['newsletter']['send'] = array('NewsletterContent\Classes\NewsletterContent', 'send');
 
 
 /**
  * Frond end modules
  */
-$GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'ModuleNewsletterContentReader';
+$GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'NewsletterContent\Modules\ContentReader';
 
 
 /**
@@ -29,12 +34,14 @@ $GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'ModuleNewsletterContentReader';
  */
 array_insert($GLOBALS['TL_CTE'], 10, array(
 	'newsletter' => array(
-		'nl_header'          => 'NewsletterHeader',
-		'nl_breakrow'        => 'NewsletterBreakRow',
-		'nl_breaktable'      => 'NewsletterBreakTable',
-		'nl_footer'          => 'NewsletterFooter',
-		'nl_text'            => 'NewsletterContentText',
-		'nl_image'           => 'NewsletterContentImage',
-		'nl_form'            => 'NewsletterContentForm'
+		'nl_header'          => 'NewsletterContent\Elements\Header',
+		'nl_breakrow'        => 'NewsletterContent\Elements\BreakRow',
+		'nl_breaktable'      => 'NewsletterContent\Elements\BreakTable',
+		'nl_footer'          => 'NewsletterContent\Elements\Footer',
+		'nl_text'            => 'NewsletterContent\Elements\Text',
+		'nl_image'           => 'NewsletterContent\Elements\Image',
+		'nl_news'            => 'NewsletterContent\Elements\News',
+		'nl_events'          => 'NewsletterContent\Elements\Events',
+		'nl_form'            => 'NewsletterContent\Elements\Form'
 	)
 ));

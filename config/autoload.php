@@ -3,12 +3,26 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
- * @package Newsletter_content
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
+
+/**
+ * @package newsletter_content
+ *
+ * @copyright  David Enke 2015
+ * @author     David Enke <post@davidenke.de>
+ * @package    newsletter_content
+ */
+
+
+/**
+ * Register the namespaces
+ */
+ClassLoader::addNamespaces(array
+(
+	'NewsletterContent',
+));
 
 
 /**
@@ -17,20 +31,17 @@
 ClassLoader::addClasses(array
 (
 	// Classes
-	'Contao\NewsletterContent'             => 'system/modules/newsletter_content/classes/NewsletterContent.php',
+	'NewsletterContent\Classes\NewsletterContent' => 'system/modules/newsletter_content/classes/NewsletterContent.php',
 
 	// Elements
-	'Contao\NewsletterBoundaries'          => 'system/modules/newsletter_content/elements/NewsletterBoundaries.php',
-	'Contao\NewsletterBreakRow'            => 'system/modules/newsletter_content/elements/NewsletterBreakRow.php',
-	'Contao\NewsletterBreakTable'          => 'system/modules/newsletter_content/elements/NewsletterBreakTable.php',
-	'Contao\NewsletterContentForm'         => 'system/modules/newsletter_content/elements/NewsletterContentForm.php',
-	'Contao\NewsletterContentImage'        => 'system/modules/newsletter_content/elements/NewsletterContentImage.php',
-	'Contao\NewsletterContentText'         => 'system/modules/newsletter_content/elements/NewsletterContentText.php',
-	'Contao\NewsletterFooter'              => 'system/modules/newsletter_content/elements/NewsletterFooter.php',
-	'Contao\NewsletterHeader'              => 'system/modules/newsletter_content/elements/NewsletterHeader.php',
-
-	// Modules
-	'Contao\ModuleNewsletterContentReader' => 'system/modules/newsletter_content/modules/ModuleNewsletterContentReader.php',
+	'NewsletterContent\Elements\Boundaries'       => 'system/modules/newsletter_content/elements/Boundaries.php',
+	'NewsletterContent\Elements\BreakRow'         => 'system/modules/newsletter_content/elements/BreakRow.php',
+	'NewsletterContent\Elements\BreakTable'       => 'system/modules/newsletter_content/elements/BreakTable.php',
+	'NewsletterContent\Elements\Footer'           => 'system/modules/newsletter_content/elements/Footer.php',
+	'NewsletterContent\Elements\Form'             => 'system/modules/newsletter_content/elements/Form.php',
+	'NewsletterContent\Elements\Header'           => 'system/modules/newsletter_content/elements/Header.php',
+	'NewsletterContent\Elements\Image'            => 'system/modules/newsletter_content/elements/Image.php',
+	'NewsletterContent\Elements\Text'             => 'system/modules/newsletter_content/elements/Text.php',
 ));
 
 

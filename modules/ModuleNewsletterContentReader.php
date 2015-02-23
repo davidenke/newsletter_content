@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Newsletter
  * @link    https://contao.org
@@ -14,18 +14,18 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Modules;
 
 
 /**
- * Class ModuleNewsletterContentReader
+ * Class ContentReader
  *
  * Front end module "newsletter content reader".
- * @copyright  David Enke 2014
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
+class ContentReader extends \ModuleNewsletterReader {
 
 	/**
 	 * Generate the module
@@ -38,17 +38,9 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 		$this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
 
 		if (TL_MODE == 'FE' && BE_USER_LOGGED_IN) {
-			if (class_exists('NewsletterModel', false)) {
-				$objNewsletter = \NewsletterModel::findByIdOrAlias(\Input::get('items'));
-			} else {
-				$objNewsletter = (object) array();
-			}
+			$objNewsletter = \NewsletterModel::findByIdOrAlias(\Input::get('items'));
 		} else {
-			if (class_exists('NewsletterModel', false)) {
-				$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
-			} else {
-				$objNewsletter = (object) array();
-			}
+			$objNewsletter = \NewsletterModel::findSentByParentAndIdOrAlias(\Input::get('items'), $this->nl_channels);
 		}
 
 		if ($objNewsletter === null) {
@@ -75,12 +67,7 @@ class ModuleNewsletterContentReader extends \ModuleNewsletterReader {
 		if (!$objNewsletter->sendText) {
 			$nl2br = ($objPage->outputFormat == 'xhtml') ? 'nl2br_xhtml' : 'nl2br_html5';
 			$strContent = '';
-
-			if (class_exists('ContentModel', false)) {
-				$objContentElements = \ContentModel::findPublishedByPidAndTable($objNewsletter->id, 'tl_newsletter');
-			} else {
-				$objContentElements = (object) array();
-			}
+			$objContentElements = \ContentModel::findPublishedByPidAndTable($objNewsletter->id, 'tl_newsletter');
 
 			if ($objContentElements !== null) {
 				if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {

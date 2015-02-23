@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
  * @link    https://contao.org
@@ -14,24 +14,24 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Elements;
 
 
 /**
- * Class NewsletterFooter
+ * Class Header
  *
- * Newsletter content element "footer".
- * @copyright  David Enke 2014
+ * Newsletter content element "header".
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class NewsletterFooter extends \NewsletterBoundaries {
+class Header extends Boundaries {
 
 	/**
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'nl_footer';
+	protected $strTemplate = 'nl_header';
 
 	/**
 	 * Parse the template
@@ -39,7 +39,7 @@ class NewsletterFooter extends \NewsletterBoundaries {
 	 */
 	public function generate() {
 		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
-			return 'NEWSLETTER FOOTER';
+			return 'NEWSLETTER HEADER';
 		}
 
 		return parent::generate();

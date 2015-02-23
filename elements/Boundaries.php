@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
  * @link    https://contao.org
@@ -14,18 +14,18 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Elements;
 
 
 /**
- * Class NewsletterBoundaries
+ * Class Boundaries
  *
  * Parent class for newsletter boundary content elements.
- * @copyright  David Enke 2014
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-abstract class NewsletterBoundaries extends \ContentElement {
+abstract class Boundaries extends \ContentElement {
 	/**
 	 * Generate the content element
 	 */

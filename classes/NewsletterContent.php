@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015Leo Feyer
  *
  * @package Newsletter
  * @link    https://contao.org
@@ -14,14 +14,14 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Classes;
 
 
 /**
  * Class NewsletterContent
  *
  * Front end module "newsletter content reader".
- * @copyright  David Enke 2014
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */

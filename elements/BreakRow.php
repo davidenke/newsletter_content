@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2014 Leo Feyer
+ * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
  * @link    https://contao.org
@@ -14,24 +14,24 @@
 /**
  * Run in a custom namespace, so the class can be replaced
  */
-namespace Contao;
+namespace NewsletterContent\Elements;
 
 
 /**
- * Class NewsletterHeader
+ * Class BreakRow
  *
- * Newsletter content element "header".
- * @copyright  David Enke 2014
+ * Newsletter content element "breakrow".
+ * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class NewsletterHeader extends \NewsletterBoundaries {
+class BreakRow extends \ContentElement {
 
 	/**
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'nl_header';
+	protected $strTemplate = 'nl_breakrow';
 
 	/**
 	 * Parse the template
@@ -39,9 +39,17 @@ class NewsletterHeader extends \NewsletterBoundaries {
 	 */
 	public function generate() {
 		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
-			return 'NEWSLETTER HEADER';
+			return 'NEWSLETTER ROW BREAK';
 		}
 
 		return parent::generate();
+	}
+
+
+	/**
+	 * Generate the content element
+	 */
+	protected function compile() {
+		return;
 	}
 }
