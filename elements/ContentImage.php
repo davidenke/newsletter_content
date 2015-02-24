@@ -18,38 +18,18 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class BreakTable
+ * Class ContentImage
  *
- * Newsletter content element "breaktable".
+ * Newsletter content element "image".
  * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class BreakTable extends \ContentElement {
+class ContentImage extends \ContentImage {
 
 	/**
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'nl_breaktable';
-
-	/**
-	 * Parse the template
-	 * @return string
-	 */
-	public function generate() {
-		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
-			return 'NEWSLETTER AREA BREAK';
-		}
-
-		return parent::generate();
-	}
-
-
-	/**
-	 * Generate the content element
-	 */
-	protected function compile() {
-		return;
-	}
+	protected $strTemplate = 'nl_image';
 }

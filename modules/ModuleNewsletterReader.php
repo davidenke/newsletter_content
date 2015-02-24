@@ -25,7 +25,7 @@ namespace NewsletterContent\Modules;
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class ContentReader extends \ModuleNewsletterReader {
+class ModuleNewsletterReader extends \ModuleNewsletterReader {
 
 	/**
 	 * Generate the module
@@ -89,6 +89,9 @@ class ContentReader extends \ModuleNewsletterReader {
 		} else {
 			$strContent = str_ireplace(' align="center"', '', $objNewsletter->content);
 		}
+
+		// Convert relative URLs
+		$strContent = $this->convertRelativeUrls($strContent);
 
 		// Parse simple tokens and insert tags
 		$strContent = $this->replaceInsertTags($strContent);

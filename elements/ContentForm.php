@@ -18,30 +18,15 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class Footer
+ * Class ContentForm
  *
- * Newsletter content element "footer".
+ * Newsletter content element "form".
  * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class Footer extends Boundaries {
-
-	/**
-	 * Template
-	 * @var string
-	 */
-	protected $strTemplate = 'nl_footer';
-
-	/**
-	 * Parse the template
-	 * @return string
-	 */
+class ContentForm extends \Form {
 	public function generate() {
-		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
-			return 'NEWSLETTER FOOTER';
-		}
-
-		return parent::generate();
+		return Hybrid::generate();
 	}
 }

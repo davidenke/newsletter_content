@@ -26,7 +26,7 @@ $GLOBALS['BE_MOD']['content']['newsletter']['send'] = array('NewsletterContent\C
 /**
  * Frond end modules
  */
-$GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'NewsletterContent\Modules\ContentReader';
+$GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'NewsletterContent\Modules\ModuleNewsletterReader';
 
 
 /**
@@ -34,14 +34,14 @@ $GLOBALS['FE_MOD']['newsletter']['nl_reader'] = 'NewsletterContent\Modules\Conte
  */
 array_insert($GLOBALS['TL_CTE'], 10, array(
 	'newsletter' => array(
-		'nl_header'          => 'NewsletterContent\Elements\Header',
-		'nl_breakrow'        => 'NewsletterContent\Elements\BreakRow',
-		'nl_breaktable'      => 'NewsletterContent\Elements\BreakTable',
-		'nl_footer'          => 'NewsletterContent\Elements\Footer',
-		'nl_text'            => 'NewsletterContent\Elements\Text',
-		'nl_image'           => 'NewsletterContent\Elements\Image',
-		'nl_news'            => 'NewsletterContent\Elements\News',
-		'nl_events'          => 'NewsletterContent\Elements\Events',
-		'nl_form'            => 'NewsletterContent\Elements\Form'
+		'nl_header'          => 'NewsletterContent\Elements\ContentHeader',
+		'nl_breakrow'        => 'NewsletterContent\Elements\ContentBreakRow',
+		'nl_breaktable'      => 'NewsletterContent\Elements\ContentBreakTable',
+		'nl_footer'          => 'NewsletterContent\Elements\ContentFooter',
+		'nl_text'            => 'NewsletterContent\Elements\ContentText',
+		'nl_image'           => 'NewsletterContent\Elements\ContentImage',
+		'nl_news'            => 'NewsletterContent\Elements\ContentNews',
+		'nl_events'          => 'NewsletterContent\Elements\ContentEvents',
+		'nl_form'            => 'NewsletterContent\Elements\ContentForm'
 	)
 ));

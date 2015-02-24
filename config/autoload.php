@@ -5,14 +5,9 @@
  *
  * Copyright (c) 2005-2015 Leo Feyer
  *
- */
-
-/**
- * @package newsletter_content
- *
- * @copyright  David Enke 2015
- * @author     David Enke <post@davidenke.de>
- * @package    newsletter_content
+ * @package Newsletter_content
+ * @link    https://contao.org
+ * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
 
@@ -31,17 +26,20 @@ ClassLoader::addNamespaces(array
 ClassLoader::addClasses(array
 (
 	// Classes
-	'NewsletterContent\Classes\NewsletterContent' => 'system/modules/newsletter_content/classes/NewsletterContent.php',
+	'NewsletterContent\Classes\NewsletterContent'      => 'system/modules/newsletter_content/classes/NewsletterContent.php',
 
 	// Elements
-	'NewsletterContent\Elements\Boundaries'       => 'system/modules/newsletter_content/elements/Boundaries.php',
-	'NewsletterContent\Elements\BreakRow'         => 'system/modules/newsletter_content/elements/BreakRow.php',
-	'NewsletterContent\Elements\BreakTable'       => 'system/modules/newsletter_content/elements/BreakTable.php',
-	'NewsletterContent\Elements\Footer'           => 'system/modules/newsletter_content/elements/Footer.php',
-	'NewsletterContent\Elements\Form'             => 'system/modules/newsletter_content/elements/Form.php',
-	'NewsletterContent\Elements\Header'           => 'system/modules/newsletter_content/elements/Header.php',
-	'NewsletterContent\Elements\Image'            => 'system/modules/newsletter_content/elements/Image.php',
-	'NewsletterContent\Elements\Text'             => 'system/modules/newsletter_content/elements/Text.php',
+	'NewsletterContent\Elements\ContentBoundaries'     => 'system/modules/newsletter_content/elements/ContentBoundaries.php',
+	'NewsletterContent\Elements\ContentBreakRow'       => 'system/modules/newsletter_content/elements/ContentBreakRow.php',
+	'NewsletterContent\Elements\ContentBreakTable'     => 'system/modules/newsletter_content/elements/ContentBreakTable.php',
+	'NewsletterContent\Elements\ContentFooter'         => 'system/modules/newsletter_content/elements/ContentFooter.php',
+	'NewsletterContent\Elements\ContentForm'           => 'system/modules/newsletter_content/elements/ContentForm.php',
+	'NewsletterContent\Elements\ContentHeader'         => 'system/modules/newsletter_content/elements/ContentHeader.php',
+	'NewsletterContent\Elements\ContentImage'          => 'system/modules/newsletter_content/elements/ContentImage.php',
+	'NewsletterContent\Elements\ContentText'           => 'system/modules/newsletter_content/elements/ContentText.php',
+
+	// Modules
+	'NewsletterContent\Modules\ModuleNewsletterReader' => 'system/modules/newsletter_content/modules/ModuleNewsletterReader.php',
 ));
 
 
@@ -53,9 +51,9 @@ TemplateLoader::addFiles(array
 	'mail_default'  => 'system/modules/newsletter_content/templates',
 	'nl_breakrow'   => 'system/modules/newsletter_content/templates',
 	'nl_breaktable' => 'system/modules/newsletter_content/templates',
-	'nl_ce_form'    => 'system/modules/newsletter_content/templates',
-	'nl_ce_image'   => 'system/modules/newsletter_content/templates',
-	'nl_ce_text'    => 'system/modules/newsletter_content/templates',
 	'nl_footer'     => 'system/modules/newsletter_content/templates',
+	'nl_form'       => 'system/modules/newsletter_content/templates',
 	'nl_header'     => 'system/modules/newsletter_content/templates',
+	'nl_image'      => 'system/modules/newsletter_content/templates',
+	'nl_text'       => 'system/modules/newsletter_content/templates',
 ));

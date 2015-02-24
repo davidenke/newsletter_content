@@ -18,20 +18,20 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class Header
+ * Class ContentBreakRow
  *
- * Newsletter content element "header".
+ * Newsletter content element "breakrow".
  * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class Header extends Boundaries {
+class ContentBreakRow extends \ContentElement {
 
 	/**
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'nl_header';
+	protected $strTemplate = 'nl_breakrow';
 
 	/**
 	 * Parse the template
@@ -39,9 +39,17 @@ class Header extends Boundaries {
 	 */
 	public function generate() {
 		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
-			return 'NEWSLETTER HEADER';
+			return 'NEWSLETTER ROW BREAK';
 		}
 
 		return parent::generate();
+	}
+
+
+	/**
+	 * Generate the content element
+	 */
+	protected function compile() {
+		return;
 	}
 }

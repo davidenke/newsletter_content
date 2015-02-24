@@ -18,20 +18,20 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class Text
+ * Class ContentText
  *
  * Newsletter content element "text".
  * @copyright  David Enke 2015
  * @author	 David Enke <post@davidenke.de>
  * @package	newsletter_content
  */
-class Text extends \ContentText {
+class ContentText extends \ContentText {
 
 	/**
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'nl_ce_text';
+	protected $strTemplate = 'nl_text';
 
 
 	/**

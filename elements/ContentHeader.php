@@ -18,15 +18,30 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class Form
+ * Class ContentHeader
  *
- * Newsletter content element "form".
+ * Newsletter content element "header".
  * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-class Form extends \Form {
+class ContentHeader extends ContentBoundaries {
+
+	/**
+	 * Template
+	 * @var string
+	 */
+	protected $strTemplate = 'nl_header';
+
+	/**
+	 * Parse the template
+	 * @return string
+	 */
 	public function generate() {
-		return Hybrid::generate();
+		if (TL_MODE == 'BE' && !defined('NEWSLETTER_CONTENT_PREVIEW')) {
+			return 'NEWSLETTER HEADER';
+		}
+
+		return parent::generate();
 	}
 }

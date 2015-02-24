@@ -18,14 +18,14 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class Boundaries
+ * Class ContentBoundaries
  *
  * Parent class for newsletter boundary content elements.
  * @copyright  David Enke 2015
  * @author     David Enke <post@davidenke.de>
  * @package    newsletter_content
  */
-abstract class Boundaries extends \ContentElement {
+abstract class ContentBoundaries extends \ContentElement {
 	/**
 	 * Generate the content element
 	 */
