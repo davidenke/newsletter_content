@@ -21,9 +21,9 @@ namespace NewsletterContent\Elements;
  * Class ContentBreakRow
  *
  * Newsletter content element "breakrow".
- * @copyright  David Enke 2015
- * @author     David Enke <post@davidenke.de>
- * @package    newsletter_content
+ * @copyright    David Enke 2015
+ * @author       David Enke <post@davidenke.de>
+ * @package      newsletter_content
  */
 class ContentBreakRow extends \ContentElement {
 

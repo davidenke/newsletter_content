@@ -6,7 +6,7 @@
  * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
- * @link    https://contao.org
+ * @link	https://contao.org
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
@@ -18,15 +18,11 @@ namespace NewsletterContent\Elements;
 
 
 /**
- * Class ContentForm
+ * Class ContentIncludes
  *
- * Newsletter content element "form".
+ * Parent class for newsletter include content elements.
  * @copyright    David Enke 2015
  * @author       David Enke <post@davidenke.de>
  * @package      newsletter_content
  */
-class ContentForm extends \Form {
-	public function generate() {
-		return Hybrid::generate();
-	}
-}
+abstract class ContentIncludes extends \ContentElement {}

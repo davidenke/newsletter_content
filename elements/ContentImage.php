@@ -6,7 +6,7 @@
  * Copyright (c) 2005-2015 Leo Feyer
  *
  * @package Core
- * @link    https://contao.org
+ * @link	https://contao.org
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  */
 
@@ -21,9 +21,9 @@ namespace NewsletterContent\Elements;
  * Class ContentImage
  *
  * Newsletter content element "image".
- * @copyright  David Enke 2015
- * @author     David Enke <post@davidenke.de>
- * @package    newsletter_content
+ * @copyright    David Enke 2015
+ * @author       David Enke <post@davidenke.de>
+ * @package      newsletter_content
  */
 class ContentImage extends \ContentImage {
 
@@ -32,4 +32,12 @@ class ContentImage extends \ContentImage {
 	 * @var string
 	 */
 	protected $strTemplate = 'nl_image';
+
+
+	/**
+	 * Generate the content element
+	 */
+	protected function compile() {
+		$this->addImageToTemplate($this->Template, $this->arrData, \Config::get('maxImageWidth'));
+	}
 }

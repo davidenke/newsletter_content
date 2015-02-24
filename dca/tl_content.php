@@ -54,7 +54,7 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 		);
 	}
 	$GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'include_type';
-	$GLOBALS['TL_DCA']['tl_content']['subpalettes']['include_type_archives'] = 'include_archives';
+	$GLOBALS['TL_DCA']['tl_content']['subpalettes']['include_type_archives'] = 'include_archives,sortOrder';
 	$GLOBALS['TL_DCA']['tl_content']['subpalettes']['include_type_items'] = 'include_items';
 
 	// customize fields
@@ -312,9 +312,14 @@ class tl_content_newsletter extends Backend {
 				$strDoItem = ampersand(sprintf($strPatternItemUrl, $objItem->id, REQUEST_TOKEN, $strTable));
 				$strDateField = \Date::parse(\Config::get('dateFormat') ?: 'd.m.Y', $objItem->$strDateKey) . ' - ';
 
+				$time = time();
+				//"($t.start='' OR $t.start<$time) AND ($t.stop='' OR $t.stop>$time) AND $t.published=1";
+				$blnPublished = (!$objItem->start || $objItem->start < $time) && (!$objItem->stop || $objItem->stop > $time) && $objItem->published;
+
 				$arrReturn[$objItem->id] = sprintf(
-					'%s<strong><a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a></strong> - <a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a>',
+					'%s<strong><a%s href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a></strong> (<a href="%s" title="%s" onclick="Backend.openModalIframe({\'width\':768,\'title\':\'%s\',\'url\':this.href});return false">%s</a>)',
 					$strDateField,
+					$blnPublished ? '' : ' style="color:#c33"',
 					$strDoItem,
 					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objItem->id),
 					sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editalias'][1]), $objItem->id),

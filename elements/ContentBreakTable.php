@@ -21,9 +21,9 @@ namespace NewsletterContent\Elements;
  * Class ContentBreakTable
  *
  * Newsletter content element "breaktable".
- * @copyright  David Enke 2015
- * @author     David Enke <post@davidenke.de>
- * @package    newsletter_content
+ * @copyright    David Enke 2015
+ * @author       David Enke <post@davidenke.de>
+ * @package      newsletter_content
  */
 class ContentBreakTable extends \ContentElement {
 
