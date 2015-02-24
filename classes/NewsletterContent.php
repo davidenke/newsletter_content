@@ -27,6 +27,11 @@ namespace NewsletterContent\Classes;
  */
 class NewsletterContent extends \Newsletter {
 	public function send(\DataContainer $objDc) {
+
+		if (TL_MODE == 'BE') {
+			$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/style.css';
+		}
+
 		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
 										->limit(1)
 										->execute($objDc->id);
