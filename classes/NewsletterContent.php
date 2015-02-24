@@ -235,6 +235,20 @@ class NewsletterContent extends \Newsletter {
 			$preview = $objTemplate->parse();
 		}
 
+		// Cache preview
+		if (!file_exists(TL_ROOT . '/system/cache/newsletter')) {
+			mkdir(TL_ROOT . '/system/cache/newsletter');
+			file_put_contents(TL_ROOT . '/system/cache/newsletter/.htaccess',
+'<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Allow from all
+</IfModule>
+<IfModule mod_authz_core.c>
+  Require all granted
+</IfModule>');
+		}
+		file_put_contents(TL_ROOT . '/system/cache/newsletter/' . $objNewsletter->alias . '.html', preg_replace('/^\s+|\n|\r|\s+$/m', '', $preview));
+
 		// Preview newsletter
 		$return = '
 <div id="tl_buttons">
@@ -268,11 +282,7 @@ class NewsletterContent extends \Newsletter {
     <td class="col_1">' . implode(', ', $arrAttachments) . '</td>
   </tr>' : '') . '
 </table>' . (!$objNewsletter->sendText ? '
-<iframe class="preview_html" id="preview_html" seamless border="0" width="703px" height="503px" style="padding:0"></iframe>
-<script>
-var f = document.getElementById("preview_html");
-(f.contentDocument || f.contentWindow || f.document).open().writeln(\'' . preg_replace('/^\s+|\n|\r|\s+$/m', '', $preview) . '\');
-</script>
+<iframe class="preview_html" id="preview_html" seamless border="0" width="703px" height="503px" style="padding:0" src="system/cache/newsletter/' . $objNewsletter->alias . '.html"></iframe>
 ' : '') . '
 <div class="preview_text">
 ' . nl2br_html5($text) . '
