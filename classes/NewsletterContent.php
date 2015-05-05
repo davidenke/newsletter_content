@@ -137,6 +137,7 @@ class NewsletterContent extends \Newsletter {
 					$arrRecipient = $objRecipient->row();
 				}
 				$arrRecipient = array_merge($arrRecipient, array(
+					'extra' => '&preview=1',
 					'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=png',
 					'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=gif',
 					'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=css',
@@ -275,6 +276,7 @@ class NewsletterContent extends \Newsletter {
 		// Replace inserttags
 		$arrName = explode(' ', $this->User->name);
 		$preview = $this->replaceInsertTags($preview);
+		$preview = $this->prepareLinkTracking($preview, $objNewsletter->id, $this->User->email, '&preview=1');
 		$preview = $this->parseSimpleTokens($preview, array(
 			'firstname' => $arrName[0],
 			'lastname' => $arrName[sizeof($arrName)-1],
@@ -391,6 +393,17 @@ class NewsletterContent extends \Newsletter {
 	}
 
 
+	protected function prepareLinkTracking($strString, $intId, $strEmail, $strExtra) {
+		return preg_replace_callback(
+			'/(\<a.*href\=")(.*)(")/Ui',
+			function($arrMatches) use ($intId, $strEmail, $strExtra) {
+				return $arrMatches[1] . \Environment::get('base') . 'tracking/?n=' . $intId . '&e=' . $strEmail . '&t=link&l=' . rtrim(strtr(base64_encode($arrMatches[2]), '+/', '-_'), '=') . $strExtra . $arrMatches[3];
+			},
+			$strString
+		);
+	}
+
+
 	protected function parseSimpleTokens($strString, $arrData) {
 		$strReturn = '';
 		$arrTags = preg_split('/(\{[^\}]+\})/', $strString, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
@@ -480,6 +493,7 @@ class NewsletterContent extends \Newsletter {
 			$html = $objTemplate->parse();
 			$html = $this->convertRelativeUrls($html);
 			$html = $this->replaceInsertTags($html);
+			$html = $this->prepareLinkTracking($html, $objNewsletter->id, $arrRecipient['email'], $arrRecipient['extra'] ?: '');
 			$html = $this->parseSimpleTokens($html, $arrRecipient);
 
 			// Append to mail object

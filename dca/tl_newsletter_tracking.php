@@ -121,6 +121,11 @@ $GLOBALS['TL_DCA']['tl_newsletter_tracking'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_newsletter_tracking']['type'],
 			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
+		'link' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_newsletter_tracking']['link'],
+			'sql'                     => "varchar(255) NOT NULL default ''"
+		),
 		'ip' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_newsletter_tracking']['ip'],

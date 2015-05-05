@@ -73,6 +73,28 @@ class NewsletterTracking extends \Controller
 			header('Access-Count: ' . strval($intAccessed));
 		}
 
+		// track
+		if (\Input::get('t') && \Input::get('n') && \Input::get('e')/*  && !\Input::get('preview') */)
+		{
+			$objTracking = new \NewsletterContent\Models\NewsletterTrackingModel();
+
+			$objTracking->tstamp = time();
+			$objTracking->pid = \Input::get('n');
+			$objTracking->type = \Input::get('t');
+			$objTracking->email = \Input::get('e');
+
+			$objTracking->ip = \Environment::get('ip');
+			$objTracking->agent = \Environment::get('httpUserAgent');
+			$objTracking->language = \Environment::get('httpAcceptLanguage');
+
+			if (\Input::get('t') == 'link' && \Input::get('l'))
+			{
+				$objTracking->link = base64_decode(str_pad(strtr(\Input::get('l'), '-_', '+/'), strlen(\Input::get('l')) % 4, '=', STR_PAD_RIGHT));
+			}
+
+			$objTracking->save();
+		}
+
 		// output
 		switch (\Input::get('t'))
 		{
@@ -96,23 +118,10 @@ class NewsletterTracking extends \Controller
 			case 'js':
 				header('Content-Type: text/javascript');
 				break;
-		}
 
-		// track
-		if (\Input::get('t') && \Input::get('n') && \Input::get('e') && !\Input::get('preview'))
-		{
-			$objTracking = new \NewsletterContent\Models\NewsletterTrackingModel();
-
-			$objTracking->tstamp = time();
-			$objTracking->pid = \Input::get('n');
-			$objTracking->type = \Input::get('t');
-			$objTracking->email = \Input::get('e');
-
-			$objTracking->ip = \Environment::get('ip');
-			$objTracking->agent = \Environment::get('httpUserAgent');
-			$objTracking->language = \Environment::get('httpAcceptLanguage');
-
-			$objTracking->save();
+			case 'link':
+				header('Location: ' . base64_decode(str_pad(strtr(\Input::get('l'), '-_', '+/'), strlen(\Input::get('l')) % 4, '=', STR_PAD_RIGHT)), true, 301);
+				break;
 		}
 
 		// exit script
