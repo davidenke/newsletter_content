@@ -26,10 +26,16 @@ namespace NewsletterContent\Classes;
  * @package    newsletter_content
  */
 class NewsletterContent extends \Newsletter {
+
+	/**
+	 * Renturn a form to choose an existing style sheet and import it
+	 * @param \DataContainer
+	 * @return string
+	 */
 	public function send(\DataContainer $objDc) {
 
 		if (TL_MODE == 'BE') {
-			$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/style.css';
+			$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/style.css';
 		}
 
 		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
@@ -118,11 +124,28 @@ class NewsletterContent extends \Newsletter {
 					$this->redirect($referer);
 				}
 
-				$arrRecipient['email'] = urldecode(\Input::get('recipient', true));
+				// get preview recipient
+				$arrRecipient = array();
+				$strEmail = urldecode(\Input::get('recipient', true));
+				$objRecipient = $this->Database->prepare("SELECT * FROM tl_member m WHERE email=? ORDER BY email")
+											   ->limit(1)
+											   ->execute($strEmail);
+
+				if ($objRecipient->num_rows < 1) {
+					$arrRecipient['email'] = $strEmail;
+				} else {
+					$arrRecipient = $objRecipient->row();
+				}
+				$arrRecipient = array_merge($arrRecipient, array(
+					'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=png',
+					'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=gif',
+					'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=css',
+					'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=js'
+				));
 
 				// Send
 				$objEmail = $this->generateEmailObject($objNewsletter, $arrAttachments);
-				$objNewsletter->email = $arrRecipient['email'];
+				$objNewsletter->email = $strEmail;
 				$this->sendNewsletter($objEmail, $objNewsletter, $arrRecipient, $text, $html);
 
 				// Redirect
@@ -168,7 +191,13 @@ class NewsletterContent extends \Newsletter {
 				while ($objRecipients->next()) {
 					$objEmail = $this->generateEmailObject($objNewsletter, $arrAttachments);
 					$objNewsletter->email = $objRecipients->email;
-					$this->sendNewsletter($objEmail, $objNewsletter, $objRecipients->row(), $text, $html);
+					$arrRecipient = array_merge($objRecipients->row(), array(
+						'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=png',
+						'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=gif',
+						'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=css',
+						'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=js'
+					));
+					$this->sendNewsletter($objEmail, $objNewsletter, $arrRecipient, $text, $html);
 
 					echo 'Sending newsletter to <strong>' . $objRecipients->email . '</strong><br>';
 				}
@@ -196,6 +225,9 @@ class NewsletterContent extends \Newsletter {
 					}
 				}
 
+				$this->Database->prepare("UPDATE tl_newsletter SET recipients=?, rejected=? WHERE id=?")
+							   ->execute($intTotal, $intRejected, $objNewsletter->id);
+
 				\Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_newsletter']['confirm'], $intTotal));
 
 				echo '<script>setTimeout(\'window.location="' . \Environment::get('base') . $referer . '"\',1000)</script>';
@@ -219,8 +251,8 @@ class NewsletterContent extends \Newsletter {
 		$sprintf = ($objNewsletter->senderName != '') ? $objNewsletter->senderName . ' &lt;%s&gt;' : '%s';
 		$this->import('BackendUser', 'User');
 
-		$preview = $html;
 		// prepare preview
+		$preview = $text;
 		if (!$objNewsletter->sendText) {
 			// Default template
 			if ($objNewsletter->template == '') {
@@ -232,7 +264,7 @@ class NewsletterContent extends \Newsletter {
 			$objTemplate->setData($objNewsletter->row());
 
 			$objTemplate->title = $objNewsletter->subject;
-			$objTemplate->body = \String::parseSimpleTokens($html, $arrRecipient);
+			$objTemplate->body = $html;
 			$objTemplate->charset = $GLOBALS['TL_CONFIG']['characterSet'];
 			$objTemplate->css = $css; // Backwards compatibility
 
@@ -240,7 +272,24 @@ class NewsletterContent extends \Newsletter {
 			$preview = $objTemplate->parse();
 		}
 
-		// Cache preview
+		// Replace inserttags
+		$arrName = explode(' ', $this->User->name);
+		$preview = $this->replaceInsertTags($preview);
+		$preview = $this->parseSimpleTokens($preview, array(
+			'firstname' => $arrName[0],
+			'lastname' => $arrName[sizeof($arrName)-1],
+			'street' => 'Königsbrücker Str. 9',
+			'postal' => '01099',
+			'city' => 'Dresden',
+			'phone' => '0351 30966184',
+			'email' => $this->User->email,
+			'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=png',
+			'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=gif',
+			'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=css',
+			'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=js'
+		));
+
+		// Create cache folder
 		if (!file_exists(TL_ROOT . '/system/cache/newsletter')) {
 			mkdir(TL_ROOT . '/system/cache/newsletter');
 			file_put_contents(TL_ROOT . '/system/cache/newsletter/.htaccess',
@@ -252,6 +301,8 @@ class NewsletterContent extends \Newsletter {
   Require all granted
 </IfModule>');
 		}
+
+		// Cache preview
 		file_put_contents(TL_ROOT . '/system/cache/newsletter/' . $objNewsletter->alias . '.html', preg_replace('/^\s+|\n|\r|\s+$/m', '', $preview));
 
 		// Preview newsletter
@@ -337,5 +388,129 @@ class NewsletterContent extends \Newsletter {
 
 		unset($_SESSION['TL_PREVIEW_MAIL_ERROR']);
 		return $return;
+	}
+
+
+	protected function parseSimpleTokens($strString, $arrData) {
+		$strReturn = '';
+		$arrTags = preg_split('/(\{[^\}]+\})/', $strString, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
+
+		// Replace the tags
+		foreach ($arrTags as $strTag)
+		{
+			if (strncmp($strTag, '{if', 3) === 0)
+			{
+				$strReturn .= preg_replace('/\{if ([A-Za-z0-9_]+)([=!<>]+)([^;$\(\)\[\]\}]+).*\}/i', '<?php if ($arrData[\'$1\'] $2 $3): ?>', $strTag);
+			}
+			elseif (strncmp($strTag, '{elseif', 7) === 0)
+			{
+				$strReturn .= preg_replace('/\{elseif ([A-Za-z0-9_]+)([=!<>]+)([^;$\(\)\[\]\}]+).*\}/i', '<?php elseif ($arrData[\'$1\'] $2 $3): ?>', $strTag);
+			}
+			elseif (strncmp($strTag, '{else', 5) === 0)
+			{
+				$strReturn .= '<?php else: ?>';
+			}
+			elseif (strncmp($strTag, '{endif', 6) === 0)
+			{
+				$strReturn .= '<?php endif; ?>';
+			}
+			else
+			{
+				$strReturn .= $strTag;
+			}
+		}
+
+		// Replace tokens
+		$strReturn = str_replace('?><br />', '?>', $strReturn);
+		$strReturn = preg_replace('/##([A-Za-z0-9_]+)##/i', '<?php echo $arrData[\'$1\']; ?>', $strReturn);
+		$strReturn = str_replace("]; ?>\n", '] . "\n"; ?>' . "\n", $strReturn); // see #7178
+
+		// Eval the code
+		ob_start();
+		$blnEval = eval("?>" . $strReturn);
+		$strReturn = ob_get_contents();
+		ob_end_clean();
+
+		// Throw an exception if there is an eval() error
+		if ($blnEval === false)
+		{
+			throw new \Exception("Error parsing simple tokens ($strReturn)");
+		}
+
+		// Return the evaled code
+		return $strReturn;
+	}
+
+
+	/**
+	 * Compile the newsletter and send it
+	 * @param \Email
+	 * @param \Database\Result
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	protected function sendNewsletter(\Email $objEmail, \Database\Result $objNewsletter, $arrRecipient, $text, $body, $css=null)
+	{
+		// Prepare the text content
+		$objEmail->text = \String::parseSimpleTokens($text, $arrRecipient);
+
+		// Add the HTML content
+		if (!$objNewsletter->sendText)
+		{
+			// Default template
+			if ($objNewsletter->template == '')
+			{
+				$objNewsletter->template = 'mail_default';
+			}
+
+			// Load the mail template
+			$objTemplate = new \BackendTemplate($objNewsletter->template);
+			$objTemplate->setData($objNewsletter->row());
+
+			$objTemplate->title = $objNewsletter->subject;
+			$objTemplate->body = $body;
+			$objTemplate->charset = \Config::get('characterSet');
+			$objTemplate->css = $css; // Backwards compatibility
+			$objTemplate->recipient = $arrRecipient['email'];
+
+			// Parse template
+			$html = $objTemplate->parse();
+			$html = $this->convertRelativeUrls($html);
+			$html = $this->replaceInsertTags($html);
+			$html = $this->parseSimpleTokens($html, $arrRecipient);
+
+			// Append to mail object
+			$objEmail->html = $html;
+			$objEmail->imageDir = TL_ROOT . '/';
+		}
+
+		// Deactivate invalid addresses
+		try
+		{
+			$objEmail->sendTo($arrRecipient['email']);
+		}
+		catch (\Swift_RfcComplianceException $e)
+		{
+			$_SESSION['REJECTED_RECIPIENTS'][] = $arrRecipient['email'];
+		}
+
+		// Rejected recipients
+		if ($objEmail->hasFailures())
+		{
+			$_SESSION['REJECTED_RECIPIENTS'][] = $arrRecipient['email'];
+		}
+
+		// HOOK: add custom logic
+		if (isset($GLOBALS['TL_HOOKS']['sendNewsletter']) && is_array($GLOBALS['TL_HOOKS']['sendNewsletter']))
+		{
+			foreach ($GLOBALS['TL_HOOKS']['sendNewsletter'] as $callback)
+			{
+				$this->import($callback[0]);
+				$this->$callback[0]->$callback[1]($objEmail, $objNewsletter, $arrRecipient, $text, $html);
+			}
+		}
 	}
 }

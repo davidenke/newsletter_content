@@ -7,6 +7,7 @@ $GLOBALS['TL_LANG']['CTE']['nl_breaktable'] = array('Bereichsumbruch', 'Erzeugt 
 $GLOBALS['TL_LANG']['CTE']['nl_footer'] = array('Fußzeile', 'Erzeugt ein Newsletter-Fußzeile.');
 $GLOBALS['TL_LANG']['CTE']['nl_text'] = array('Text', 'Erzeugt ein Rich-Text-Element.');
 $GLOBALS['TL_LANG']['CTE']['nl_image'] = array('Bild', 'Erzeugt ein Bild-Element.');
+$GLOBALS['TL_LANG']['CTE']['nl_gallery'] = array('Galerie', 'Erzeugt eine Bildergalerie.');
 $GLOBALS['TL_LANG']['CTE']['nl_news'] = array('Nachrichten', 'Zeigt ausgewählte Nachrichten an.');
 $GLOBALS['TL_LANG']['CTE']['nl_events'] = array('Events', 'Zeigt ausgewählte Events an.');
 $GLOBALS['TL_LANG']['CTE']['nl_form'] = array('Formular', 'Erzeugt ein Newsletter-Formular.');

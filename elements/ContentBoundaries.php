@@ -26,6 +26,7 @@ namespace NewsletterContent\Elements;
  * @package      newsletter_content
  */
 abstract class ContentBoundaries extends \ContentElement {
+
 	/**
 	 * Generate the content element
 	 */

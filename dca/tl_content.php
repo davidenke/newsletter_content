@@ -32,6 +32,8 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 		'nl_footer' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
 		'nl_text' => $GLOBALS['TL_DCA']['tl_content']['palettes']['text'],
 		'nl_image' => $GLOBALS['TL_DCA']['tl_content']['palettes']['image'],
+//		'nl_gallery' => $GLOBALS['TL_DCA']['tl_content']['palettes']['gallery'],
+		'nl_gallery' => '{type_legend},type,headline;{image_legend},images,perRow,numberOfItems;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_news' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_events' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_form' => $GLOBALS['TL_DCA']['tl_content']['palettes']['form']
@@ -97,6 +99,53 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['include_items'] = array(
 	'eval'                    => array('multiple'=>true, 'mandatory'=>true),
 	'sql'                     => "blob NULL"
 );
+$GLOBALS['TL_DCA']['tl_content']['fields']['images'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_content']['images'],
+	'exclude'                 => true,
+	'inputType'               => 'multiColumnWizard',
+	'eval'                    => array(
+		'mandatory'               => true,
+		'minCount'                => 2,
+		'buttonPos'               => 'middle',
+		'columnFields'            => array(
+			'singleSRC'               => array(
+				'label'                   => &$GLOBALS['TL_LANG']['tl_content']['singleSRC'],
+				'exclude'                 => true,
+				'inputType'               => 'fileTree',
+				'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'mandatory'=>true, 'extensions'=>\Config::get('validImageTypes'))
+			),
+			'alt' => array
+			(
+				'label'                   => &$GLOBALS['TL_LANG']['tl_content']['alt'],
+				'exclude'                 => true,
+				'search'                  => true,
+				'inputType'               => 'text',
+				'eval'                    => array('maxlength'=>255, 'columnPos'=>2, 'style'=>'width:90%'),
+			),
+			'imageUrl' => array
+			(
+				'label'                   => &$GLOBALS['TL_LANG']['tl_content']['imageUrl'],
+				'exclude'                 => true,
+				'search'                  => true,
+				'inputType'               => 'text',
+				'eval'                    => array('rgxp'=>'url', 'decodeEntities'=>true, 'maxlength'=>255, 'tl_class'=>'wizard', 'columnPos'=>2, 'style'=>'width:90%'),
+				'wizard' => array
+				(
+					array('tl_content', 'pagePicker')
+				)
+			),
+			'caption' => array
+			(
+				'label'                   => &$GLOBALS['TL_LANG']['tl_content']['caption'],
+				'exclude'                 => true,
+				'search'                  => true,
+				'inputType'               => 'text',
+				'eval'                    => array('maxlength'=>255, 'allowHtml'=>true, 'columnPos'=>2, 'style'=>'width:90%')
+			)
+		)
+	),
+	'sql'                     => "blob NULL"
+);
 
 class tl_content_newsletter extends Backend {
 
@@ -106,6 +155,8 @@ class tl_content_newsletter extends Backend {
 	public function __construct() {
 		parent::__construct();
 		$this->import('BackendUser', 'User');
+
+		$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/multicolumnwizard.css';
 	}
 
 

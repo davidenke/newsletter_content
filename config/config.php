@@ -40,8 +40,15 @@ array_insert($GLOBALS['TL_CTE'], 10, array(
 		'nl_footer'          => 'NewsletterContent\Elements\ContentFooter',
 		'nl_text'            => 'NewsletterContent\Elements\ContentText',
 		'nl_image'           => 'NewsletterContent\Elements\ContentImage',
+		'nl_gallery'         => 'NewsletterContent\Elements\ContentGallery',
 		'nl_news'            => 'NewsletterContent\Elements\ContentNews',
 		'nl_events'          => 'NewsletterContent\Elements\ContentEvents',
 		'nl_form'            => 'NewsletterContent\Elements\ContentForm'
 	)
 ));
+
+
+/**
+ * Models
+ */
+$GLOBALS['TL_MODELS']['tl_newsletter_tracking'] = 'NewsletterContent\Models\NewsletterTrackingModel';
