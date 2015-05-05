@@ -1,0 +1,31 @@
+table.multicolumnwizard
+{
+	width: 100%;
+/*
+	padding: 10px 5px;
+*/
+}
+table.multicolumnwizard tr td
+{
+	padding-top: 6px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+table.multicolumnwizard tr td:first-child
+{
+	width: 115px;
+	padding-left: 10px;
+}
+table.multicolumnwizard tr:last-child td
+{
+	border-bottom: none;
+}
+table.multicolumnwizard tr:nth-child(even) td
+{
+	background: #f9f9f9;
+}
+table.multicolumnwizard tr td.operations
+{
+	width: 70px;
+	text-align: right;
+}
