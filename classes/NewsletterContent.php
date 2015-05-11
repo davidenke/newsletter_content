@@ -102,12 +102,12 @@ class NewsletterContent extends \Newsletter {
 			}
 		}
 
-		// Convert relative URLs
-		$html = $this->convertRelativeUrls($html);
-
 		// Replace insert tags
 		$text = $this->replaceInsertTags($objNewsletter->text);
 		$html = $this->replaceInsertTags($html);
+
+		// Convert relative URLs
+		$html = $this->convertRelativeUrls($html);
 
 		// Set back to object
 		$objNewsletter->content = $html;
