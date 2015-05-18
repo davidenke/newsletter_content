@@ -68,7 +68,7 @@ class tl_newsletter_content extends tl_newsletter {
 //		$intTracked = NewsletterContent\Models\NewsletterTrackingModel::countTrackedByPid($arrRow['id']);
 		$objTracked = NewsletterContent\Models\NewsletterTrackingModel::findTrackedByPid($arrRow['id']);
 		$intTracked = !is_null($objTracked) ? $objTracked->count() : 0;
-		$intPercent = round($intTracked / $intTotal * 100);
+		$intPercent = @round($intTracked / $intTotal * 100);
 		$strStats = sprintf(
 			$GLOBALS['TL_LANG']['tl_newsletter']['sentTo'],
 			$arrRow['recipients'],
