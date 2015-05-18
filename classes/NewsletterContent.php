@@ -27,6 +27,14 @@ namespace NewsletterContent\Classes;
  */
 class NewsletterContent extends \Newsletter {
 
+	protected $isFlexible = false;
+
+	protected function __construct() {
+		parent::__construct();
+		$this->import('BackendUser');
+		$this->isFlexible = $this->BackendUser->backendTheme == 'flexible';
+	}
+
 	/**
 	 * Renturn a form to choose an existing style sheet and import it
 	 * @param \DataContainer
@@ -36,6 +44,10 @@ class NewsletterContent extends \Newsletter {
 
 		if (TL_MODE == 'BE') {
 			$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/style.css';
+
+			if ($this->isFlexible) {
+				$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/style-flexible.css';
+			}
 		}
 
 		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
@@ -541,9 +553,12 @@ class NewsletterContent extends \Newsletter {
 		}
 
 		if (TL_MODE == 'BE') {
-			//$GLOBALS['TL_JAVASCRIPT'][] = 'assets/mootools/milkchart/1.5.9.0/MilkChart.yc.js';
-			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/mootools/milkchart/1.5.9.0/MilkChart_src.js';
+			$GLOBALS['TL_JAVASCRIPT'][] = 'assets/mootools/milkchart/1.5.9.0/MilkChart.yc.js';
 			$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/style.css';
+
+			if ($this->isFlexible) {
+				$GLOBALS['TL_CSS'][] = 'system/modules/newsletter_content/assets/css/style-flexible.css';
+			}
 		}
 
 		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
@@ -698,7 +713,7 @@ window.charts.push(function(vw) {
 		useZero: true,
 	    border: false,
         background: "#F0F0F0",
-        width: (vw >= 1200 ? 883 : (vw >= 768 ? 703 : vw - 46)),
+        width: ' . ($this->isFlexible ? '(vw >= 1200 ? 883 : (vw >= 768 ? 703 : vw - 46))' : '703') . ',
         lineWeight: 1.3,
         rowTicks: false,
         labelTicks: true
@@ -738,7 +753,7 @@ window.charts.push(function(vw) {
 		useZero: true,
 	    border: false,
         background: "#F0F0F0",
-        width: (vw >= 1200 ? 883 : (vw >= 768 ? 703 : vw - 46)),
+        width: ' . ($this->isFlexible ? '(vw >= 1200 ? 883 : (vw >= 768 ? 703 : vw - 46))' : '703') . ',
         height: 350,
         strokeWeight: 1.3,
         strokeColor: "#F0F0F0",
@@ -768,15 +783,16 @@ window.addEvent("domready", function() {
 			for (i = 0; i < window.charts.length; ++i) {
 				if (window.els[i] && window.els[i].container) window.els[i].container.destroy();
 				window.els[i] = window.charts[i](vw);
-				console.log(window.els[i].element.id)
 				window.els[i].container.addClass("canvas n-" + (i+1));
 			}
 		}
 	}
 	window.createCharts();
-	window.addEvent("resize", function() {
-		if (window.charts.length) window.createCharts();
-	});
+		';
+		if ($this->isFlexible) {
+			$return.= 'window.addEvent("resize", window.createCharts);';
+		}
+		$return.= '
 });
 </script>';
 

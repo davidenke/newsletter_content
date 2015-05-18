@@ -11,14 +11,3 @@ table.stats
 {
 	border-top: 0;
 }
-
-@media (min-width: 1200px)
-{
-	table.stats
-	{
-		width: 885px;
-	}
-	.preview_html {
-		width: 883px;
-	}
-}
