@@ -21,6 +21,7 @@
  */
 $GLOBALS['BE_MOD']['content']['newsletter']['tables'][] = 'tl_content';
 $GLOBALS['BE_MOD']['content']['newsletter']['send'] = array('NewsletterContent\Classes\NewsletterContent', 'send');
+$GLOBALS['BE_MOD']['content']['newsletter']['stats'] = array('NewsletterContent\Classes\NewsletterContent', 'stats');
 
 
 /**

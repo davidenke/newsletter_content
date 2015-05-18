@@ -79,14 +79,14 @@ class NewsletterTrackingModel extends \Model
 
 
 	/**
-	 * Count tracking hits by their parent ID
+	 * Find tracking hits by their parent ID
 	 *
 	 * @param integer $intPid      The newsletter ID
 	 * @param array   $arrOptions  An optional options array
 	 *
 	 * @return integer The number of newsletter tracking items
 	 */
-	public static function findTrackedByPid($intPid, array $arrOptions=array())
+	public static function findTrackedInteractionsByPid($intPid, array $arrOptions=array())
 	{
 		if (!$intPid)
 		{
@@ -100,6 +100,11 @@ class NewsletterTrackingModel extends \Model
 		if (!isset($arrOptions['group']))
 		{
 			$arrOptions['group'] = "$t.email";
+		}
+
+		if (!isset($arrOptions['order']))
+		{
+			$arrOptions['order'] = "$t.tstamp";
 		}
 
 		return static::findBy($arrColumns, $arrValues, $arrOptions);

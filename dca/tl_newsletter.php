@@ -31,6 +31,14 @@ array_insert($GLOBALS['TL_DCA']['tl_newsletter']['list']['operations'], 1, array
 		'icon'                => 'header.gif'
 	)
 ));
+array_insert($GLOBALS['TL_DCA']['tl_newsletter']['list']['operations'], 99, array(
+	'stats' => array(
+		'label'               => &$GLOBALS['TL_LANG']['tl_newsletter']['stats'],
+		'href'                => 'key=stats',
+		'icon'                => 'system/modules/newsletter_content/assets/img/stats.png',
+		'button_callback'     => array('tl_newsletter_content', 'showStats')
+	)
+));
 $GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default'] = str_replace(';{html_legend},content;', ',nl_date;', $GLOBALS['TL_DCA']['tl_newsletter']['palettes']['default']);
 $GLOBALS['TL_DCA']['tl_newsletter']['fields']['recipients'] = array(
 	'sql'                     => "int(10) unsigned NOT NULL default '0'"
@@ -66,7 +74,7 @@ class tl_newsletter_content extends tl_newsletter {
 
 		$intTotal = $arrRow['recipients'] + $arrRow['rejected'];
 //		$intTracked = NewsletterContent\Models\NewsletterTrackingModel::countTrackedByPid($arrRow['id']);
-		$objTracked = NewsletterContent\Models\NewsletterTrackingModel::findTrackedByPid($arrRow['id']);
+		$objTracked = NewsletterContent\Models\NewsletterTrackingModel::findTrackedInteractionsByPid($arrRow['id']);
 		$intTracked = !is_null($objTracked) ? $objTracked->count() : 0;
 		$intPercent = @round($intTracked / $intTotal * 100);
 		$strStats = sprintf(
@@ -86,6 +94,17 @@ class tl_newsletter_content extends tl_newsletter {
 </div>' . "\n";
 
 		return '<div class="tl_content_left">' . $arrRow['subject'] . ' <span style="color:#b3b3b3;padding-left:3px">[' . $arrRow['senderName'] . ' &lt;' . $arrRow['sender'] . '&gt;]</span></div>';
+	}
+
+
+	public function showStats($row, $href, $label, $title, $icon, $attributes, $table)
+	{
+		if (!$row['sent'])
+		{
+			return '';
+		}
+
+		return '<a href="'.$this->addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
 	}
 
 

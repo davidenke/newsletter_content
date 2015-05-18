@@ -26,10 +26,10 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 
 	// copy default palettes
 	$arrPalettes = array(
-		'nl_header' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
-		'nl_breakrow' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
-		'nl_breaktable' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
-		'nl_footer' => $GLOBALS['TL_DCA']['tl_content']['palettes']['default'],
+		'nl_header' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_breakrow' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_breaktable' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_footer' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_text' => $GLOBALS['TL_DCA']['tl_content']['palettes']['text'],
 		'nl_image' => $GLOBALS['TL_DCA']['tl_content']['palettes']['image'],
 //		'nl_gallery' => $GLOBALS['TL_DCA']['tl_content']['palettes']['gallery'],
@@ -61,6 +61,7 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 
 	// customize fields
 	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = 'nl_text';
+	$GLOBALS['TL_DCA']['tl_content']['fields']['customTpl']['options_callback'] = array('tl_content_newsletter', 'getNewsletterElementTemplates');
 
 	// remove default elements
 	foreach ($GLOBALS['TL_CTE'] as $k => $v) {
@@ -266,6 +267,15 @@ class tl_content_newsletter extends Backend {
 		}
 
 		return true;
+	}
+
+
+	/**
+	 * Return all newsletter content element templates as array
+	 * @return array
+	 */
+	public function getNewsletterElementTemplates() {
+		return $this->getTemplateGroup('nl_');
 	}
 
 
