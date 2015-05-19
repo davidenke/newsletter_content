@@ -26,16 +26,16 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 
 	// copy default palettes
 	$arrPalettes = array(
-		'nl_header' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
-		'nl_breakrow' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
-		'nl_breaktable' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
-		'nl_footer' => '{type_legend},type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_header' => '{type_legend},type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_breakrow' => '{type_legend},type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_breaktable' => '{type_legend},type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_footer' => '{type_legend},type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_text' => $GLOBALS['TL_DCA']['tl_content']['palettes']['text'],
 		'nl_image' => $GLOBALS['TL_DCA']['tl_content']['palettes']['image'],
 //		'nl_gallery' => $GLOBALS['TL_DCA']['tl_content']['palettes']['gallery'],
-		'nl_gallery' => '{type_legend},type,headline;{image_legend},images,perRow,numberOfItems;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
-		'nl_news' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
-		'nl_events' => '{type_legend},type,headline;{include_legend},include_type;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_gallery' => '{type_legend},type,headline;{image_legend},images,perRow,numberOfItems;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_news' => '{type_legend},type,headline;{include_legend},include_type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
+		'nl_events' => '{type_legend},type,headline;{include_legend},include_type;{template_legend:hide},customTpl;{expert_legend:hide},cssID,space;{invisible_legend:hide},invisible,start,stop',
 		'nl_form' => $GLOBALS['TL_DCA']['tl_content']['palettes']['form']
 	);
 
@@ -45,7 +45,7 @@ if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_cont
 			array(
 				',guests,',
 				',fullsize,',
-				'{template_legend:hide},customTpl;{protected_legend:hide},protected;'
+				'{protected_legend:hide},protected;'
 			),
 			array(
 				',',
@@ -275,7 +275,45 @@ class tl_content_newsletter extends Backend {
 	 * @return array
 	 */
 	public function getNewsletterElementTemplates() {
-		return $this->getTemplateGroup('nl_');
+		$strPrefix = 'nl_';
+		$arrTemplates = array();
+
+		// Get the default templates
+		foreach (\TemplateLoader::getPrefixedFiles($strPrefix) as $strTemplate)
+		{
+			$arrTemplates[$strTemplate][] = 'root';
+		}
+		$arrCustomized = glob(TL_ROOT . '/templates/' . $strPrefix . '*');
+
+		// Add the customized templates
+		if (is_array($arrCustomized))
+		{
+			foreach ($arrCustomized as $strFile)
+			{
+				$strTemplate = basename($strFile, strrchr($strFile, '.'));
+				$arrTemplates[$strTemplate][] = $GLOBALS['TL_LANG']['MSC']['global'];
+			}
+		}
+
+		// Show the template sources (see #6875)
+		foreach ($arrTemplates as $k=>$v)
+		{
+			$v = array_filter($v, function($a) {
+				return $a != 'root';
+			});
+			if (empty($v))
+			{
+				$arrTemplates[$k] = $k;
+			}
+			else
+			{
+				$arrTemplates[$k] = $k . ' (' . implode(', ', $v) . ')';
+			}
+		}
+
+		// Sort the template names
+		ksort($arrTemplates);
+		return $arrTemplates;
 	}
 
 

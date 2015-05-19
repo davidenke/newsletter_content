@@ -25,4 +25,17 @@ namespace NewsletterContent\Elements;
  * @author       David Enke <post@davidenke.de>
  * @package      newsletter_content
  */
-abstract class ContentIncludes extends \ContentElement {}
+abstract class ContentIncludes extends \ContentElement {
+	/**
+	 * Initialize the object
+	 * @param object
+	 * @param string
+	 */
+	public function __construct($objElement, $strColumn='main') {
+		parent::__construct($objElement, $strColumn);
+
+		if ($this->customTpl != '') {
+			$this->strTemplate = $this->customTpl;
+		}
+	}
+}

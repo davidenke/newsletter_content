@@ -33,6 +33,20 @@ class ContentBreakRow extends \ContentElement {
 	 */
 	protected $strTemplate = 'nl_breakrow';
 
+
+	/**
+	 * Initialize the object
+	 * @param object
+	 * @param string
+	 */
+	public function __construct($objElement, $strColumn='main') {
+		parent::__construct($objElement, $strColumn);
+
+		if ($this->customTpl != '') {
+			$this->strTemplate = $this->customTpl;
+		}
+	}
+
 	/**
 	 * Parse the template
 	 * @return string

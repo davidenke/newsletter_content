@@ -36,6 +36,20 @@ class ContentNews extends ContentIncludes {
 
 
 	/**
+	 * Initialize the object
+	 * @param object
+	 * @param string
+	 */
+	public function __construct($objElement, $strColumn='main') {
+		parent::__construct($objElement, $strColumn);
+
+		if ($this->customTpl != '') {
+			$this->strTemplate = $this->customTpl;
+		}
+	}
+
+
+	/**
 	 * Generate the content element
 	 */
 	protected function compile() {
