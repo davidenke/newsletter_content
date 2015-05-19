@@ -798,4 +798,13 @@ window.addEvent("domready", function() {
 
 		return $return;
 	}
+
+	public function cleanStats($strContent, $strTemplate) {
+		// disable markup compression
+		if ($strTemplate == 'be_main' && \Input::get('key') == 'stats') {
+			\Config::set('minifyMarkup', false);
+		}
+
+		return $strContent;
+	}
 }
