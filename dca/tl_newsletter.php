@@ -100,6 +100,11 @@ class tl_newsletter_content extends tl_newsletter {
 
 	public function checkPermission() {
 		if (Input::get('key') == 'stats') {
+			if ($this->User->isAdmin)
+			{
+				return;
+			}
+
 			// Set root IDs
 			if (!is_array($this->User->newsletters) || empty($this->User->newsletters)) {
 				$root = array(0);
