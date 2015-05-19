@@ -53,3 +53,9 @@ array_insert($GLOBALS['TL_CTE'], 10, array(
  * Models
  */
 $GLOBALS['TL_MODELS']['tl_newsletter_tracking'] = 'NewsletterContent\Models\NewsletterTrackingModel';
+
+
+/**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('NewsletterContent\Classes\NewsletterContent', 'cleanStats');

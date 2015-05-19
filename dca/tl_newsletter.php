@@ -21,6 +21,7 @@
  */
 $GLOBALS['TL_DCA']['tl_newsletter']['config']['ctable'] = array('tl_content');
 $GLOBALS['TL_DCA']['tl_newsletter']['config']['switchToEdit'] = true;
+$GLOBALS['TL_DCA']['tl_newsletter']['config']['onload_callback'] = array(array('tl_newsletter_content', 'checkPermission'));
 $GLOBALS['TL_DCA']['tl_newsletter']['config']['ondelete_callback'][] = array('tl_newsletter_content', 'removeTrackedData');
 $GLOBALS['TL_DCA']['tl_newsletter']['list']['sorting']['child_record_callback'] = array('tl_newsletter_content', 'listNewsletterArticles');
 $GLOBALS['TL_DCA']['tl_newsletter']['list']['operations']['edit']['href'] = 'table=tl_content';
@@ -97,10 +98,38 @@ class tl_newsletter_content extends tl_newsletter {
 	}
 
 
-	public function showStats($row, $href, $label, $title, $icon, $attributes, $table)
-	{
-		if (!$row['sent'])
-		{
+	public function checkPermission() {
+		if (Input::get('key') == 'stats') {
+			// Set root IDs
+			if (!is_array($this->User->newsletters) || empty($this->User->newsletters)) {
+				$root = array(0);
+			} else {
+				$root = $this->User->newsletters;
+			}
+
+			$id = strlen(Input::get('id')) ? Input::get('id') : CURRENT_ID;
+
+			$objChannel = $this->Database->prepare("SELECT pid FROM tl_newsletter WHERE id=?")
+										 ->limit(1)
+										 ->execute($id);
+
+			if ($objChannel->numRows < 1) {
+				$this->log('Invalid newsletter ID "'.$id.'"', __METHOD__, TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
+
+			if (!in_array($objChannel->pid, $root)) {
+				$this->log('Not enough permissions to show stats of newsletter ID "'.$id.'" of newsletter channel ID "'.$objChannel->pid.'"', __METHOD__, TL_ERROR);
+				$this->redirect('contao/main.php?act=error');
+			}
+		} else {
+			parent::checkPermission();
+		}
+	}
+
+
+	public function showStats($row, $href, $label, $title, $icon, $attributes, $table) {
+		if (!$row['sent']) {
 			return '';
 		}
 
