@@ -4,7 +4,7 @@
     "description": "Simple newsletter to content element association for Contao 3",
     "keywords": ["contao","newsletter","content","tracking"],
     "homepage": "https://github.com/davidenke/newsletter_content",
-    "license": "MIT",
+    "license": "LGPL-3.0+",
     "authors": [
         {
             "name": "David Enke",
@@ -14,10 +14,12 @@
         }
     ],
     "support":{
-        "issues":"https://github.com/davidenke/newsletter_content/issues"
+        "issues":"https://github.com/davidenke/newsletter_content/issues",
+        "source":"https://github.com/davidenke/newsletter_content"
     },
     "require": {
-        "contao/core": ">=3.2,<4-dev",
+	    "php":">=5.3.2",
+        "contao/core":">=3.2,<4-dev"
     },
     "autoload": {
         "classmap": [""]
