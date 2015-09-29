@@ -21,7 +21,7 @@
  */
 $GLOBALS['BE_MOD']['content']['newsletter']['tables'][] = 'tl_content';
 $GLOBALS['BE_MOD']['content']['newsletter']['send'] = array('NewsletterContent\Classes\NewsletterContent', 'send');
-$GLOBALS['BE_MOD']['content']['newsletter']['stats'] = array('NewsletterContent\Classes\NewsletterContent', 'stats');
+$GLOBALS['BE_MOD']['content']['newsletter']['stats'] = array('NewsletterContent\Classes\NewsletterStatistics', 'show');
 
 
 /**
@@ -58,4 +58,4 @@ $GLOBALS['TL_MODELS']['tl_newsletter_tracking'] = 'NewsletterContent\Models\News
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('NewsletterContent\Classes\NewsletterContent', 'cleanStats');
+$GLOBALS['TL_HOOKS']['outputBackendTemplate'][] = array('NewsletterContent\Classes\NewsletterStatistics', 'clean');
