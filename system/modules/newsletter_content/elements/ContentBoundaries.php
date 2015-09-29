@@ -48,12 +48,15 @@ abstract class ContentBoundaries extends \ContentElement {
 		$objNewsletter = \NewsletterModel::findByIdOrAlias($this->pid);
 		$objNewsletterChannel = \NewsletterChannelModel::findByIds(array($objNewsletter->pid), array('limit' => 1));
 
-		$objParent = $this->getPageDetails($objNewsletterChannel->jumpTo);
-		$href = ampersand($this->generateFrontendUrl($objParent->row(), sprintf((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s', $objNewsletter->alias)));
-		//$href = ampersand($this->generateFrontendUrl($objParent->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s'), $objParent->language));
-
 		$this->Template->setData($objNewsletter->row());
-		$this->Template->view_online = $href;
+
+		if ($objNewsletterChannel->jumpTo) {
+			$objParent = $this->getPageDetails($objNewsletterChannel->jumpTo);
+			$href = ampersand($this->generateFrontendUrl($objParent->row(), sprintf((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s', $objNewsletter->alias)));
+			//$href = ampersand($this->generateFrontendUrl($objParent->row(), ((\Config::get('useAutoItem') && !\Config::get('disableAlias')) ?  '/%s' : '/items/%s'), $objParent->language));
+
+			$this->Template->view_online = $href;
+		}
 
 		return;
 	}

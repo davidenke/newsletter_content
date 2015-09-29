@@ -25,8 +25,8 @@ ClassLoader::addClasses(array
 (
 	// Classes
 	'NewsletterContent\Classes\NewsletterContent'      => 'system/modules/newsletter_content/classes/NewsletterContent.php',
+	'NewsletterContent\Classes\NewsletterStatistics'   => 'system/modules/newsletter_content/classes/NewsletterStatistics.php',
 	'NewsletterContent\Classes\NewsletterTracking'     => 'system/modules/newsletter_content/classes/NewsletterTracking.php',
-	'NewsletterContent\Classes\NewsletterStatistics'     => 'system/modules/newsletter_content/classes/NewsletterStatistics.php',
 
 	// Elements
 	'NewsletterContent\Elements\ContentBoundaries'     => 'system/modules/newsletter_content/elements/ContentBoundaries.php',
