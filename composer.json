@@ -1,0 +1,32 @@
+{
+    "name": "davidenke/newsletter_content",
+    "type": "contao-module",
+    "description": "Simple newsletter to content element association for Contao 3",
+    "keywords": ["contao","newsletter","content","tracking"],
+    "homepage": "https://github.com/davidenke/newsletter_content",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David Enke",
+            "email": "post@davidenke.de",
+            "homepage": "http://www.davidenke.de",
+            "role": "Developer"
+        }
+    ],
+    "support":{
+        "issues":"https://github.com/davidenke/newsletter_content/issues"
+    },
+    "require": {
+        "contao/core": ">=3.2,<4-dev",
+    },
+    "autoload": {
+        "classmap": [""]
+    },
+    "extra": {
+        "contao": {
+            "sources": {
+                "": "system/modules/newsletter_content"
+            }
+        }
+    }
+}
