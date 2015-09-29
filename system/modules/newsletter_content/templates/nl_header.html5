@@ -1,0 +1,25 @@
+<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateHeader">
+	<tr>
+		<td valign="top" class="headerContent">
+			<table border="0" cellpadding="10" cellspacing="0" width="100%">
+				<tr>
+					<td valign="top">
+						Sie erhalten diesen Newsletter, weil Sie unter {{env::host}} ein Abonnement abgeschlossen haben.
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" width="180">
+						Klicken Sie <a href="">hier</a>, wenn Sie diesen Newsletter in Zukunft nicht mehr erhalten möchten.<br>
+						Falls dieser Newsletter nicht korrekt dargestellt wird, können Sie ihn <a href="">hier</a> online anzeigen.
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+<table border="0" cellpadding="10" cellspacing="0" width="600">
+	<tr>
+		<td valign="top" class="areaContent">
+			<table border="0" cellpadding="10" cellspacing="0" width="100%">
+				<tr>
