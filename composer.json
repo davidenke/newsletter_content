@@ -1,34 +1,25 @@
 {
-    "name": "davidenke/newsletter_content",
-    "type": "contao-module",
-    "description": "Simple newsletter to content element association for Contao 3",
-    "keywords": ["contao","newsletter","content","tracking"],
-    "homepage": "https://github.com/davidenke/newsletter_content",
-    "license": "LGPL-3.0+",
-    "authors": [
-        {
-            "name": "David Enke",
-            "email": "post@davidenke.de",
-            "homepage": "http://www.davidenke.de",
-            "role": "Developer"
-        }
-    ],
-    "support":{
-        "issues":"https://github.com/davidenke/newsletter_content/issues",
-        "source":"https://github.com/davidenke/newsletter_content"
-    },
-    "require": {
-	    "php":">=5.3.2",
-        "contao/core":">=3.2,<4-dev"
-    },
-    "autoload": {
-        "classmap": [""]
-    },
-    "extra": {
-        "contao": {
-            "sources": {
-                "": "system/modules/newsletter_content"
-            }
-        }
-    }
+	"name": "contao/core",
+	"type": "project",
+	"description": "Contao Open Source CMS",
+	"license": "LGPL-3.0+",
+	"authors": [
+		{
+			"name": "Leo Feyer",
+			"homepage": "https://github.com/leofeyer"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"leafo/scssphp": "~0.1",
+		"michelf/php-markdown": "~1.4",
+		"matthiasmullie/minify": "~1.3",
+		"oyejorge/less.php": "~1.7",
+		"phpspec/php-diff": "~1.0",
+		"simplepie/simplepie": "~1.3",
+		"swiftmailer/swiftmailer": "~5.2",
+		"tecnick.com/tcpdf": "~6.0",
+		"true/punycode": "~1.0",
+		"contao-components/compass": "~0.12"
+	}
 }
