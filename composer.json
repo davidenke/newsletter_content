@@ -18,8 +18,8 @@
         "source":"https://github.com/davidenke/newsletter_content"
     },
     "require": {
-        "contao/core-bundle":">=3.2,<4-dev",
-        "contao-community-alliance/composer-plugin":"~2.4 || ~3.0"
+        "contao/core":">=3.2,<4.0",
+        "contao-community-alliance/composer-installer":"*",
     },
     "autoload": {
         "classmap": ["system/"]
@@ -30,7 +30,9 @@
     "extra": {
         "contao": {
             "sources": {
-                "system/modules/newsletter_content": "system/modules/newsletter_content"
+                "system/modules/newsletter_content": "system/modules/newsletter_content",
+                "assets/mootools/milkchart": "assets/mootools/milkchart",
+                "tracking": "tracking"
             }
         }
     }
