@@ -72,7 +72,7 @@ class NewsletterContent extends \Newsletter {
 
 		// Add default sender address
 		if ($objNewsletter->sender == '') {
-			list($objNewsletter->senderName, $objNewsletter->sender) = \String::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']);
+			list($objNewsletter->senderName, $objNewsletter->sender) = \StringUtil::splitFriendlyEmail($GLOBALS['TL_CONFIG']['adminEmail']);
 		}
 
 		$arrAttachments = array();
@@ -484,7 +484,7 @@ class NewsletterContent extends \Newsletter {
 	protected function sendNewsletter(\Email $objEmail, \Database\Result $objNewsletter, $arrRecipient, $text, $body, $css=null)
 	{
 		// Prepare the text content
-		$objEmail->text = \String::parseSimpleTokens($text, $arrRecipient);
+		$objEmail->text = \StringUtil::parseSimpleTokens($text, $arrRecipient);
 
 		// Add the HTML content
 		if (!$objNewsletter->sendText)
