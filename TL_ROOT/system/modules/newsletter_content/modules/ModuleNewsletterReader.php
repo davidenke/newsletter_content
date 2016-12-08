@@ -76,6 +76,11 @@ class ModuleNewsletterReader extends \ModuleNewsletterReader {
 				foreach ($objContentElements as $objContentElement) {
 					$strContent.= $this->getContentElement($objContentElement->id);
 				}
+			} else {
+				if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
+				    define('NEWSLETTER_CONTENT_PREVIEW', true);
+				}
+				$strContent = $objNewsletter->content;
 			}
 			
 			// Parse simple tokens and insert tags
