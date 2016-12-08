@@ -112,6 +112,11 @@ class NewsletterContent extends \Newsletter {
 			while ($objContentElements->next()) {
 				$html.= $this->getContentElement($objContentElements->id);
 			}
+		} else {
+			if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
+			    define('NEWSLETTER_CONTENT_PREVIEW', true);
+			}
+			$html = $objNewsletter->content;
 		}
 
 		// Replace insert tags
