@@ -409,7 +409,7 @@ class NewsletterContent extends \Newsletter {
 		return preg_replace_callback(
 			'/(\<a.*href\=")(.*)(")/Ui',
 			function($arrMatches) use ($intId, $strEmail, $strExtra) {
-				if ( $arrMatches[2]{0} == "#") {
+				if ( $arrMatches[2]{0} == "#" OR substr( $arrMatches[2], 0, 6 ) == "mailto" ) {
 					return $arrMatches[0];
 				} else {
 					return $arrMatches[1] . \Environment::get('base') . 'tracking/?n=' . $intId . '&e=' . $strEmail . '&t=link&l=' . rtrim(strtr(base64_encode($arrMatches[2]), '+/', '-_'), '=') . $strExtra . $arrMatches[3];
