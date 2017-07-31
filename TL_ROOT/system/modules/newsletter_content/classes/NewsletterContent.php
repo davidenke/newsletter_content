@@ -120,8 +120,8 @@ class NewsletterContent extends \Newsletter {
 		}
 
 		// Replace insert tags
-		$text = $this->replaceInsertTags($objNewsletter->text);
-		$html = $this->replaceInsertTags($html);
+		$text = $this->replaceInsertTags($objNewsletter->text, false);
+		$html = $this->replaceInsertTags($html, false);
 
 		// Convert relative URLs
 		$html = $this->convertRelativeUrls($html);
@@ -292,7 +292,7 @@ class NewsletterContent extends \Newsletter {
 
 		// Replace inserttags
 		$arrName = explode(' ', $this->User->name);
-		$preview = $this->replaceInsertTags($preview);
+		$preview = $this->replaceInsertTags($preview, false);
 		$preview = $this->prepareLinkTracking($preview, $objNewsletter->id, $this->User->email, '&preview=1');
 		$preview = $this->parseSimpleTokens($preview, array(
 			'firstname' => $arrName[0],
@@ -513,7 +513,7 @@ class NewsletterContent extends \Newsletter {
 			// Parse template
 			$html = $objTemplate->parse();
 			$html = $this->convertRelativeUrls($html);
-			$html = $this->replaceInsertTags($html);
+			$html = $this->replaceInsertTags($html, false);
 			$html = $this->prepareLinkTracking($html, $objNewsletter->id, $arrRecipient['email'], $arrRecipient['extra'] ?: '');
 			$html = $this->parseSimpleTokens($html, $arrRecipient);
 
