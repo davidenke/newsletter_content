@@ -99,7 +99,7 @@ class NewsletterTrackingModel extends \Model
 
 		if (!isset($arrOptions['group']))
 		{
-			$arrOptions['group'] = "$t.email";
+			$arrOptions['group'] = "$t.email,$t.id";
 		}
 
 		if (!isset($arrOptions['order']))
