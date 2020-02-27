@@ -22,7 +22,12 @@
 if ($this->Input->get('do') == 'newsletter' || (\Input::get('table') == 'tl_content' && \Input::get('field') == 'type')) {
 	$GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_newsletter';
 	$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_newsletter', 'checkPermission');
-	$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias', 'useSMTP');
+
+	if (version_compare(VERSION, '4', '<')) {
+		$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias', 'useSMTP');
+	} else {
+		$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['headerFields'] = array('subject', 'alias');
+	}
 
 	// copy default palettes
 	$arrPalettes = array(
@@ -81,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['include_type'] = array(
 	'default'                 => 'archives',
 	'options'                 => array('archives', 'items'),
 	'reference'               => &$GLOBALS['TL_LANG']['tl_content']['include_types'],
-	'eval'                    => array('chosen'=>true, 'submitOnChange'=>true, 'mandatory'=>true),
+	'eval'                    => array('chosen'=>true, 'submitOnChange'=>true, 'mandatory'=>true, 'tl_class'=>'w50'),
 	'sql'                     => "varchar(32) NOT NULL default ''"
 );
 $GLOBALS['TL_DCA']['tl_content']['fields']['include_archives'] = array(
@@ -89,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['include_archives'] = array(
 	'exclude'                 => true,
 	'inputType'               => 'checkboxWizard',
 	'options_callback'        => array('tl_content_newsletter', 'getIncludeArchives'),
-	'eval'                    => array('multiple'=>true, 'mandatory'=>true),
+	'eval'                    => array('multiple'=>true, 'mandatory'=>true, 'tl_class'=>'clr'),
 	'sql'                     => "blob NULL"
 );
 $GLOBALS['TL_DCA']['tl_content']['fields']['include_items'] = array(
@@ -97,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['include_items'] = array(
 	'exclude'                 => true,
 	'inputType'               => 'checkboxWizard',
 	'options_callback'        => array('tl_content_newsletter', 'getIncludeItems'),
-	'eval'                    => array('multiple'=>true, 'mandatory'=>true),
+	'eval'                    => array('multiple'=>true, 'mandatory'=>true, 'tl_class'=>'clr'),
 	'sql'                     => "blob NULL"
 );
 $GLOBALS['TL_DCA']['tl_content']['fields']['images'] = array(
@@ -386,7 +391,7 @@ class tl_content_newsletter extends Backend {
 				$strTitleKeyArchive = 'title';
 				$strPatternArchiveUrl = 'contao/main.php?do=news&id=%s&act=edit&popup=1&nb=1&rt=%s';
 				$strPatternItemUrl    = 'contao/main.php?do=news&id=%s&act=edit&popup=1&nb=1&rt=%s&table=%s';
-				$objItems = \NewsModel::findAll(array('order'=>$strTable . '.' . $strDateKey));
+				$objItems = \NewsModel::findAll(array('order'=>$strTable . '.' . $strDateKey.' DESC'));
 				break;
 
 			case 'nl_events':
@@ -396,7 +401,7 @@ class tl_content_newsletter extends Backend {
 				$strTitleKeyArchive = 'title';
 				$strPatternArchiveUrl = 'contao/main.php?do=calendar&id=%s&act=edit&popup=1&nb=1&rt=%s';
 				$strPatternItemUrl    = 'contao/main.php?do=calendar&id=%s&act=edit&popup=1&nb=1&rt=%s&table=%s';
-				$objItems = \CalendarEventsModel::findAll(array('order'=>$strTable . '.' . $strDateKey));
+				$objItems = \CalendarEventsModel::findAll(array('order'=>$strTable . '.' . $strDateKey.' DESC'));
 				break;
 
 			default:

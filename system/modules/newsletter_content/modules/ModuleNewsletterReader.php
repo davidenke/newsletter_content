@@ -76,14 +76,19 @@ class ModuleNewsletterReader extends \ModuleNewsletterReader {
 				foreach ($objContentElements as $objContentElement) {
 					$strContent.= $this->getContentElement($objContentElement->id);
 				}
+			} else {
+				if (!defined('NEWSLETTER_CONTENT_PREVIEW')) {
+				    define('NEWSLETTER_CONTENT_PREVIEW', true);
+				}
+				$strContent = $objNewsletter->content;
 			}
 			
 			// Parse simple tokens and insert tags
 			$strContent = $this->replaceInsertTags($strContent);
-			$strContent = \String::parseSimpleTokens($strContent, array());
+			$strContent = \StringUtil::parseSimpleTokens($strContent, array());
 	
 			// Encode e-mail addresses
-			$strContent = \String::encodeEmail($strContent);
+			$strContent = \StringUtil::encodeEmail($strContent);
 
 			$this->Template->content = $strContent;
 		} else {
@@ -95,10 +100,10 @@ class ModuleNewsletterReader extends \ModuleNewsletterReader {
 
 		// Parse simple tokens and insert tags
 		$strContent = $this->replaceInsertTags($strContent);
-		$strContent = \String::parseSimpleTokens($strContent, array());
+		$strContent = \StringUtil::parseSimpleTokens($strContent, array());
 
 		// Encode e-mail addresses
-		$strContent = \String::encodeEmail($strContent);
+		$strContent = \StringUtil::encodeEmail($strContent);
 
 		$this->Template->content = $strContent;
 		$this->Template->subject = $objNewsletter->subject;
