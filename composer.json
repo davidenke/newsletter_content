@@ -31,7 +31,7 @@
         "contao": {
             "sources": {
                 "system/modules/newsletter_content": "system/modules/newsletter_content",
-                "assets/mootools/milkchart": "assets/mootools/milkchart"
+                "assets/mootools/milkchart/1.5.9.0": "assets/mootools/milkchart/1.5.9.0"
             }
         }
     }
