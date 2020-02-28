@@ -16,15 +16,17 @@
 $path = \dirname(__DIR__);
 
 while (($path = \dirname($path)) && $path !== '/') {
-    $script = $path.'/system/initialize.php';
+    $init = $path.'/system/initialize.php';
 
-    if (file_exists($script)) {
-        require_once($script);
-        return;
+    if (file_exists($init)) {
+        require_once($init);
+        break;
     }
 }
 
-die('Contao initialize.php was not found');
+if (!file_exists($init)) {
+    die('Contao initialize.php was not found');
+}
 
 // Run the controller
 $tracking = \NewsletterContent\Classes\NewsletterTracking::getInstance();
