@@ -50,9 +50,15 @@ class NewsletterContent extends \Newsletter {
 			}
 		}
 
-		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
-										->limit(1)
-										->execute($objDc->id);
+		if (version_compare(VERSION, '4', '<')) {
+			$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
+											->limit(1)
+											->execute($objDc->id);
+		} else {
+			$objNewsletter = $this->Database->prepare("SELECT * FROM tl_newsletter WHERE id=?")
+											->limit(1)
+											->execute($objDc->id);
+		}
 
 		// Return if there is no newsletter
 		if ($objNewsletter->numRows < 1) {
@@ -155,10 +161,10 @@ class NewsletterContent extends \Newsletter {
 				}
 				$arrRecipient = array_merge($arrRecipient, array(
 					'extra' => '&preview=1',
-					'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=png',
-					'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=gif',
-					'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=css',
-					'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=js'
+					'tracker_png' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=png',
+					'tracker_gif' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=gif',
+					'tracker_css' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=css',
+					'tracker_js' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $strEmail . '&preview=1&t=js'
 				));
 
 				// Send
@@ -210,10 +216,10 @@ class NewsletterContent extends \Newsletter {
 					$objEmail = $this->generateEmailObject($objNewsletter, $arrAttachments);
 					$objNewsletter->email = $objRecipients->email;
 					$arrRecipient = array_merge($objRecipients->row(), array(
-						'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=png',
-						'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=gif',
-						'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=css',
-						'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=js'
+						'tracker_png' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=png',
+						'tracker_gif' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=gif',
+						'tracker_css' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=css',
+						'tracker_js' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $objRecipients->email . '&t=js'
 					));
 					$this->sendNewsletter($objEmail, $objNewsletter, $arrRecipient, $text, $html);
 
@@ -302,27 +308,19 @@ class NewsletterContent extends \Newsletter {
 			'city' => 'Dresden',
 			'phone' => '0351 30966184',
 			'email' => $this->User->email,
-			'tracker_png' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=png',
-			'tracker_gif' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=gif',
-			'tracker_css' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=css',
-			'tracker_js' => \Environment::get('base') . 'tracking/?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=js'
+			'tracker_png' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=png',
+			'tracker_gif' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=gif',
+			'tracker_css' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=css',
+			'tracker_js' => \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $objNewsletter->id . '&e=' . $this->User->email . '&preview=1&t=js'
 		));
 
 		// Create cache folder
-		if (!file_exists(TL_ROOT . '/system/cache/newsletter')) {
-			mkdir(TL_ROOT . '/system/cache/newsletter');
-			file_put_contents(TL_ROOT . '/system/cache/newsletter/.htaccess',
-'<IfModule !mod_authz_core.c>
-  Order allow,deny
-  Allow from all
-</IfModule>
-<IfModule mod_authz_core.c>
-  Require all granted
-</IfModule>');
+		if (!file_exists(TL_ROOT . '/system/modules/newsletter_content/public/newsletter')) {
+			mkdir(TL_ROOT . '/system/modules/newsletter_content/public/newsletter');
 		}
 
 		// Cache preview
-		file_put_contents(TL_ROOT . '/system/cache/newsletter/' . $objNewsletter->alias . '.html', preg_replace('/^\s+|\n|\r|\s+$/m', '', $preview));
+		file_put_contents(TL_ROOT . '/system/modules/newsletter_content/public/newsletter/' . $objNewsletter->alias . '.html', preg_replace('/^\s+|\n|\r|\s+$/m', '', $preview));
 
 		// Preview newsletter
 		$return = '
@@ -332,7 +330,7 @@ class NewsletterContent extends \Newsletter {
 
 <h2 class="sub_headline">'.sprintf($GLOBALS['TL_LANG']['tl_newsletter']['send'][1], $objNewsletter->id).'</h2>
 '.\Message::generate().'
-<form action="'.ampersand(\Environment::get('script'), true).'" id="tl_newsletter_send" class="tl_form" method="get">
+<form action="' . TL_SCRIPT . '" id="tl_newsletter_send" class="tl_form tl_edit_form" method="get">
 <div class="tl_formbody_edit tl_newsletter_send">
 <input type="hidden" name="do" value="' . \Input::get('do') . '">
 <input type="hidden" name="table" value="' . \Input::get('table') . '">
@@ -357,36 +355,36 @@ class NewsletterContent extends \Newsletter {
     <td class="col_1">' . implode(', ', $arrAttachments) . '</td>
   </tr>' : '') . '
 </table>' . (!$objNewsletter->sendText ? '
-<iframe class="preview_html" id="preview_html" seamless border="0" width="703px" height="503px" style="padding:0" src="system/cache/newsletter/' . $objNewsletter->alias . '.html"></iframe>
+<iframe class="preview_html" id="preview_html" seamless border="0" width="703px" height="503px" style="padding:0" src="system/modules/newsletter_content/public/newsletter/' . $objNewsletter->alias . '.html"></iframe>
 ' : '') . '
 <div class="preview_text">
 ' . nl2br_html5($text) . '
 </div>
 
-<div class="tl_tbox">
-<div class="w50">
+<fieldset class="tl_tbox nolegend">
+<div class="w50 widget">
   <h3><label for="ctrl_mpc">' . $GLOBALS['TL_LANG']['tl_newsletter']['mailsPerCycle'][0] . '</label></h3>
   <input type="text" name="mpc" id="ctrl_mpc" value="10" class="tl_text" onfocus="Backend.getScrollOffset()">' . (($GLOBALS['TL_LANG']['tl_newsletter']['mailsPerCycle'][1] && $GLOBALS['TL_CONFIG']['showHelp']) ? '
   <p class="tl_help tl_tip">' . $GLOBALS['TL_LANG']['tl_newsletter']['mailsPerCycle'][1] . '</p>' : '') . '
 </div>
-<div class="w50">
+<div class="w50 widget">
   <h3><label for="ctrl_timeout">' . $GLOBALS['TL_LANG']['tl_newsletter']['timeout'][0] . '</label></h3>
   <input type="text" name="timeout" id="ctrl_timeout" value="1" class="tl_text" onfocus="Backend.getScrollOffset()">' . (($GLOBALS['TL_LANG']['tl_newsletter']['timeout'][1] && $GLOBALS['TL_CONFIG']['showHelp']) ? '
   <p class="tl_help tl_tip">' . $GLOBALS['TL_LANG']['tl_newsletter']['timeout'][1] . '</p>' : '') . '
 </div>
-<div class="w50">
+<div class="w50 widget">
   <h3><label for="ctrl_start">' . $GLOBALS['TL_LANG']['tl_newsletter']['start'][0] . '</label></h3>
   <input type="text" name="start" id="ctrl_start" value="0" class="tl_text" onfocus="Backend.getScrollOffset()">' . (($GLOBALS['TL_LANG']['tl_newsletter']['start'][1] && $GLOBALS['TL_CONFIG']['showHelp']) ? '
   <p class="tl_help tl_tip">' . $GLOBALS['TL_LANG']['tl_newsletter']['start'][1] . '</p>' : '') . '
 </div>
-<div class="w50">
+<div class="w50 widget">
   <h3><label for="ctrl_recipient">' . $GLOBALS['TL_LANG']['tl_newsletter']['sendPreviewTo'][0] . '</label></h3>
   <input type="text" name="recipient" id="ctrl_recipient" value="'.$this->User->email.'" class="tl_text" onfocus="Backend.getScrollOffset()">' . (isset($_SESSION['TL_PREVIEW_MAIL_ERROR']) ? '
   <div class="tl_error">' . $GLOBALS['TL_LANG']['ERR']['email'] . '</div>' : (($GLOBALS['TL_LANG']['tl_newsletter']['sendPreviewTo'][1] && $GLOBALS['TL_CONFIG']['showHelp']) ? '
   <p class="tl_help tl_tip">' . $GLOBALS['TL_LANG']['tl_newsletter']['sendPreviewTo'][1] . '</p>' : '')) . '
 </div>
 <div class="clear"></div>
-</div>
+</fieldset>
 </div>';
 
 		// Do not send the newsletter if there is an attachment format error
@@ -417,7 +415,7 @@ class NewsletterContent extends \Newsletter {
 				if ( $arrMatches[2]{0} == "#" OR substr( $arrMatches[2], 0, 6 ) == "mailto" ) {
 					return $arrMatches[0];
 				} else {
-					return $arrMatches[1] . \Environment::get('base') . 'tracking/?n=' . $intId . '&e=' . $strEmail . '&t=link&l=' . rtrim(strtr(base64_encode($arrMatches[2]), '+/', '-_'), '=') . $strExtra . $arrMatches[3];
+					return $arrMatches[1] . \Environment::get('base') . 'system/modules/newsletter_content/public/tracking.php?n=' . $intId . '&e=' . $strEmail . '&t=link&l=' . rtrim(strtr(base64_encode($arrMatches[2]), '+/', '-_'), '=') . $strExtra . $arrMatches[3];
 				}
 			},
 			$strString

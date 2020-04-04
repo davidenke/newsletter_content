@@ -1,10 +1,10 @@
 {
     "name": "davidenke/newsletter_content",
     "type": "contao-module",
-    "description": "Simple newsletter to content element association for Contao 3",
+    "description": "Simple newsletter to content element association for Contao 3 and 4",
     "keywords": ["contao","newsletter","content","tracking"],
     "homepage": "https://github.com/davidenke/newsletter_content",
-    "license": "LGPL-3.0+",
+    "license": "LGPL-3.0-or-later",
     "authors": [
         {
             "name": "David Enke",
@@ -18,16 +18,20 @@
         "source":"https://github.com/davidenke/newsletter_content"
     },
     "require": {
-	    "php":">=5.3.2",
-        "contao/core":">=3.2,<4-dev"
+        "php":">=5.3.2",
+        "contao/core-bundle": "^3.2 || ^4.4",
+        "contao/newsletter-bundle": "^3.2 || ^4.4",
+        "contao-community-alliance/composer-plugin": "^2.4 || ^3.0",
+        "menatwork/contao-multicolumnwizard": "^3.0"
     },
-    "autoload": {
-        "classmap": [""]
+    "replace": {
+        "contao-legacy/newsletter_content": "*"
     },
     "extra": {
         "contao": {
             "sources": {
-                "": "system/modules/newsletter_content"
+                "system/modules/newsletter_content": "system/modules/newsletter_content",
+                "assets/mootools/milkchart/1.5.9.0": "assets/mootools/milkchart/1.5.9.0"
             }
         }
     }

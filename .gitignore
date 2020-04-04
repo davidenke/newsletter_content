@@ -9,3 +9,5 @@ Thumbs.db
 .build/
 .idea/
 nbproject/
+
+system/modules/newsletter_content/public/newsletter/
