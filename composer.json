@@ -1,7 +1,7 @@
 {
     "name": "davidenke/newsletter_content",
     "type": "contao-module",
-    "description": "Simple newsletter to content element association for Contao 3",
+    "description": "Simple newsletter to content element association for Contao 3 and 4",
     "keywords": ["contao","newsletter","content","tracking"],
     "homepage": "https://github.com/davidenke/newsletter_content",
     "license": "LGPL-3.0-or-later",
