@@ -98,9 +98,9 @@ class NewsletterStatistics extends \Newsletter {
 
 		// Mining data
 		$objDatabase = \Database::getInstance();
-		$objTrackedInteractions = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? GROUP BY email")->execute($objDc->id);
-		$objTrackedLinks = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? AND type='link' GROUP BY email")->execute($objDc->id);
-		$objTrackedOpened = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? AND type!='link' GROUP BY email")->execute($objDc->id);
+		$objTrackedInteractions = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? GROUP BY email,track_time")->execute($objDc->id);
+		$objTrackedLinks = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? AND type='link' GROUP BY email,track_time")->execute($objDc->id);
+		$objTrackedOpened = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time FROM tl_newsletter_tracking WHERE pid=? AND type!='link' GROUP BY email,track_time")->execute($objDc->id);
 		$objTrackedLinkClicks = $objDatabase->prepare("SELECT UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(tstamp))) as track_time,link FROM tl_newsletter_tracking WHERE pid=? AND link!='' AND type='link'")->execute($objDc->id);
 
 		$arrCount = array();
