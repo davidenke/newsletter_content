@@ -56,7 +56,7 @@ class NewsletterStatistics extends \Newsletter {
 			}
 		}
 
-		$objNewsletter = $this->Database->prepare("SELECT n.*, c.useSMTP, c.smtpHost, c.smtpPort, c.smtpUser, c.smtpPass FROM tl_newsletter n LEFT JOIN tl_newsletter_channel c ON n.pid=c.id WHERE n.id=?")
+		$objNewsletter = $this->Database->prepare("SELECT * FROM tl_newsletter WHERE id=?")
 										->limit(1)
 										->execute($objDc->id);
 
