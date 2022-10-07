@@ -233,6 +233,8 @@ class NewsletterContent extends \Newsletter {
 			if ($objRecipients->numRows < 1 || ($intStart + $intPages) >= $intTotal) {
 				$this->Session->set('tl_newsletter_send', null);
 
+				$intRejected = 0;
+
 				// Deactivate rejected addresses
 				if (!empty($_SESSION['REJECTED_RECIPIENTS']))
 				{
